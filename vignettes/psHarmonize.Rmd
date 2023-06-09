@@ -1,0 +1,334 @@
+---
+title: "Introduction to psHarmonize"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to psHarmonize}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+
+library(dplyr)
+library(knitr)
+library(stringr)
+library(tidyr)
+library(glue)
+library(purrr)
+
+library(psHarmonize)
+
+```
+
+The psHarmonize package provides functions that makes harmonizing multiple cohorts easier. 
+
+The main function is the `harmonization()` function. It takes an **harmonization sheet** as it's input, and outputs a list of objects based on what you've requested.
+
+
+<br>
+
+## Harmonization sheet
+
+<hr>
+<br>
+
+
+The harmonization sheet will serve as a set of instructions. It lists the source datasets, source variables (columns), and what modifications (if any) you will require.
+
+
+```{r}
+head(harmonization_sheet_example) %>%
+  kable()
+```
+
+<br>
+
+It contains the following columns:
+
+Column          | Description
+--------------- | -------------
+id_var          | Name of participant ID variable in source dataset. This will be renamed to `ID` in harmonized dataset.
+item            | New variable name
+study           | Name of cohort
+domain          | Category name
+subdomain       | Sub category name
+source_dataset  | Source dataset name
+source_item     | Existing variable name in source dataset
+visit           | Visit number
+code1           | Code or instructions to modify original value
+code_type       | "recode category" or "function"
+coding_notes    | Notes to describe coding instructions
+possible_range  | Range of numeric values that are valid for this variable. (Example: `[5, 100]`)
+
+
+<br>
+
+## Cohort data
+
+<hr>
+<br>
+
+Three sample datasets have been provided with the psHarmonize package.
+
+```{r}
+head(cohort_a) %>%
+  kable()
+
+head(cohort_b) %>%
+  kable()
+
+head(cohort_c) %>%
+  kable()
+```
+
+
+<br>
+
+### Cohort A
+
+Cohort A has 10,000 participants, and 3 visits. The height is measured in inches, and the weight is measured in lbs.
+
+Cohort A's education categories are as follows:
+
+Code | Description
+-----|-------------
+1    | No education
+2    | Completed grade school
+3    | Jr-High School
+4    | Completed High School
+5    | Some college
+
+
+### Cohort B
+
+Cohort B has 5,000 participants, and 1 visit. The height in measured in inches, and the weight is measured in kg.
+
+Cohort B's education categories are as follows:
+
+Code | Description
+-----|-------------
+1    | Grade school
+2    | High school
+3    | College
+4    | Graduate or professional school
+
+
+### Cohort C
+
+Cohort C has 7,000 participants, and 1 visit. The height is measured in cm, and the weight is measured in lbs.
+
+Cohort C's education categories are as follows:
+
+Code | Description
+-----|-------------
+1    | Grade school
+2    | High school
+3    | Associate's degree
+4    | Bachelor's degree
+
+
+<br>
+
+## Harmonization process
+
+<hr>
+<br>
+
+If we want to be able to pool data from these disparate cohorts together we will have to convert or recode some of the values in the original datasets.
+
+For example, since the cohorts all have different units for continuous measurements (like height and weight), we will have to convert these values so they have the similar units across cohorts (cm and kg respectively). This will be handed with the `function` code type in the harmonization function.
+
+Categorical values will have to be collapsed into similar values. Education will have to be recoded into groupings that appropriate account for the original values. This will be handed with the `recode category` code type in the harmonization function.
+
+
+<br>
+
+## Creating harmonization sheet
+
+<hr>
+<br>
+
+The harmonization sheet is the input to the harmonization function. It is essentially a set of directions on how to modify data in order to create a harmonized dataset. This modification can be in the form of a `function`, `recode`, or no modification.
+
+<br>
+
+## Calling harmonization function
+
+<hr>
+<br>
+
+When the `harmonization` function is called, the current cohort, subdomain, and visit is printed to the console.
+
+<br>
+
+```{r}
+
+harmonization_object <- harmonization(harmonization_sheet = harmonization_sheet_example, 
+                          long_dataset = TRUE, 
+                          wide_dataset = TRUE,
+                          error_log = TRUE, 
+                          source_variables = TRUE)
+
+```
+
+<br>
+
+## Extracting harmonization objects
+
+<hr>
+<br>
+
+The function will return multiple items in a list. You can extract data frames from the list with the `$` operator and by referring to them by their name.
+
+Possible items include:
+
+- long_dataset
+- wide_dataset
+- error_log
+
+<br>
+
+## Long dataset
+
+<hr>
+<br>
+
+The long dataset will have one row per participant, visit, and cohort.
+
+```{r}
+
+harmonized_long_dataset <- harmonization_object$long_dataset
+
+head(harmonized_long_dataset) %>%
+  kable()
+
+```
+
+The column `ID` is the participant id. If the source data is longitudinal and has multiple visits per patient, that participant ID will have multiple rows of data in the long dataset. 
+
+For example the patients in `cohort_a` have multiple visits, so they will have multiple rows in the long dataset.
+
+```{r}
+
+harmonized_long_dataset %>%
+  filter(cohort == 'cohort_a') %>%
+  arrange(visit) %>%
+  head() %>%
+  kable()
+
+```
+
+
+
+<br>
+
+## Wide dataset
+
+<hr>
+<br>
+
+The wide dataset will have one row per participant. The visit number will be added to the variable name as a suffix after an underscore.
+
+
+```{r}
+
+harmonized_wide_dataset <- harmonization_object$wide_dataset
+
+head(harmonized_wide_dataset) %>%
+  kable()
+
+```
+
+
+
+
+<br>
+
+## Error log
+
+<hr>
+<br>
+
+The error log will have a status that indicates whether a specific variable was successfully harmonized.
+
+```{r}
+error_log <- harmonization_object$error_log
+
+table(error_log$completed_status)
+```
+
+
+<br>
+
+# Creating reports
+
+<hr>
+<br>
+
+
+<br>
+
+## Error report
+
+<hr>
+<br>
+
+The error report will create an html report showing any issues with the harmonization process.
+
+
+```{r, eval=FALSE}
+
+create_error_log_report(harmonized_object, path = './output/', file = 'Error_log.html')
+
+```
+
+
+
+
+<br>
+
+## Summary report
+
+<hr>
+<br>
+
+The summary report will create an html report showing summary statistics of your harmonized dataset. The harmonized object will be the input.
+
+
+```{r, eval=FALSE}
+
+create_summary_report(harmonization_object = harmonization_object, path = './output/', file = 'Summary_report')
+
+```
+
+
+<br>
+
+The output of the summary report should look like the following:
+
+<br>
+
+```{r Image, echo=FALSE}
+
+# Obtain file path of image in package
+summary_out_img_path <- system.file('img', 'summary_output.png', package = 'psHarmonize')
+
+```
+
+
+```{r, results='asis' , echo=FALSE}
+
+cat('![', 'Summary output example.', '](',summary_out_img_path,')')
+
+```
+
+
+

@@ -1,0 +1,273 @@
+---
+title: "Harmonized summary comparison Report"
+date: "`r format(Sys.Date(), '%m/%d/%Y')`"
+output: 
+  html_document:
+    toc_depth: 5
+params:
+  long_dataset: long_dataset
+  harmonization_sheet: harmonization_sheet
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(janitor)
+library(kableExtra)
+library(glue)
+
+harmonized_long_dataset <- long_dataset
+
+```
+
+
+
+```{r functions}
+
+cont_multi_visit_compare <- function(){
+
+  output <- knitr::knit_child('./Rmarkdown_child/cont_multi_visit_compare.Rmd', quiet = TRUE)
+   
+  cat(output, '   ', sep = '\n\n')
+  
+}
+
+
+cont_one_visit_compare <- function(){
+
+  output <- knitr::knit_child('./Rmarkdown_child/cont_one_visit_compare.Rmd', quiet = TRUE)
+   
+  cat(output, '   ', sep = '\n\n')
+  
+}
+
+
+cat_source_compare <- function(){
+
+  output <- knitr::knit_child('./Rmarkdown_child/cat_source_compare.Rmd', quiet = TRUE)
+   
+  cat(output, '   ', sep = '\n\n')
+  
+}
+
+
+```
+
+
+
+```{r categories}
+
+# Identifying which variables to output
+# IDing columns that are not ID, cohort, or visit
+# Also not outputting source variables at the moment
+
+categories <- names(harmonized_long_dataset)[grepl('^cohort$|^ID$|^visit$|^source_', names(harmonized_long_dataset), ignore.case = TRUE) == FALSE]
+
+cohorts <- unique(harmonized_long_dataset$cohort)
+
+```
+
+
+
+# {.tabset}
+
+
+
+```{r Output, results='asis'}
+
+
+for(current_cohort in cohorts)
+{
+  
+  cat('\n')
+  cat(paste0('## ', current_cohort, ' {.tabset}'))
+  cat('\n')
+  cat('<hr>')
+  cat('\n\n')
+
+  for(current_cat in categories)
+  {
+    
+    cat('\n')
+    cat(paste0('### ', current_cat, ' {.tabset}'))
+    cat('\n')
+    cat('<hr>')
+    cat('\n\n')
+
+    
+    ## Identify type of variable in harmonized dataset
+    ## and display the appropriate output
+    
+    num_unique_val <- length(unique(long_dataset[[current_cat]]))
+    
+    num_visits <- long_dataset %>%
+      filter(cohort == current_cohort & !is.na(eval(parse(text = current_cat)))) %>%
+      summarise(num_visits = n_distinct(visit)) %>%
+      pull(num_visits)
+    
+    
+    source_current_cat <- paste0('source_', current_cat)
+    
+    
+    ## Obtaining units (if present)
+    
+    if('final_units' %in% names(harmonization_sheet))
+    {
+    
+      units <- harmonization_sheet %>%
+        filter(study == current_cohort & item == current_cat) %>%
+        filter(!is.na(final_units) & !(final_units == '') & !(final_units == ' ')) %>%
+        distinct(final_units) %>%
+        pull(final_units)
+      
+      if(length(units) > 1 || length(units) == 0 || is.na(units) || units == '' || units == ' ')
+      {
+        units <- 'value'
+      }
+      
+    } else
+    {
+      units <- 'value'
+    }
+    
+    
+    ## Obtaining source units (if present)
+    
+    if('source_units' %in% names(harmonization_sheet))
+    {
+    
+      source_units <- harmonization_sheet %>%
+        filter(study == current_cohort & item == current_cat) %>%
+        filter(!is.na(source_units) & !(source_units == '') & !(source_units == ' ')) %>%
+        distinct(source_units) %>%
+        pull(source_units)
+      
+      if(length(source_units) > 1 || length(source_units) == 0 || is.na(source_units) || source_units == '' || source_units == ' ')
+      {
+        source_units <- 'value'
+      }
+      
+    } else
+    {
+      source_units <- 'value'
+    }
+    
+    
+    ## Obtaining coding notes (if present)
+    
+    if('coding_notes' %in% names(harmonization_sheet))
+    {
+    
+      coding_notes <- harmonization_sheet %>%
+        filter(study == current_cohort & item == current_cat) %>%
+        filter(!is.na(coding_notes) & !(coding_notes == '') & !(coding_notes == ' ')) %>%
+        distinct(coding_notes) %>%
+        pull(coding_notes)
+      
+      if(length(coding_notes) > 1 || length(coding_notes) == 0 || is.na(coding_notes) || coding_notes == '' || coding_notes == ' ')
+      {
+        coding_notes <- ''
+      }
+      
+    } else
+    {
+      coding_notes <- ''
+    }
+
+
+    ## Preparing data for output
+    data_intermediate <- long_dataset %>%
+      filter(cohort == {{ current_cohort }}) %>%
+      rename(value = {{ current_cat }},
+             source_value = {{ source_current_cat }})
+    
+
+    ## Creating output for continuous, multiple visits
+    if(num_unique_val > 10 & num_visits > 1 & is.numeric(long_dataset[[current_cat]]))
+    {
+      
+      cont_multi_visit_compare()
+      
+      if(coding_notes != '')
+      {
+        
+        cat('\n\n')
+        cat('**Notes:**')
+        cat('\n\n')
+        cat(coding_notes)
+        cat('\n\n')
+        
+      }
+    
+    ## Creating output for continuous, one visit
+    } else if (num_unique_val > 10 & num_visits == 1 & is.numeric(long_dataset[[current_cat]])) {
+      
+     
+      # Identify which visit
+      visit_to_use <- data_intermediate %>%
+        filter(cohort == current_cohort & !is.na(value)) %>%
+        distinct(visit) %>%
+        pull(visit)
+      
+      # Limit to visit
+      data_intermediate <- data_intermediate %>%
+        filter(visit == visit_to_use)
+       
+      cont_one_visit_compare()
+      
+      if(coding_notes != '')
+      {
+        
+        cat('\n\n')
+        cat('**Notes:**')
+        cat('\n\n')
+        cat(coding_notes)
+        cat('\n\n')
+        
+      }
+    
+    ## Creating output for categorical, multiple visits
+    } else if (num_visits > 1 & is.character(long_dataset[[current_cat]]))
+    {
+  
+      cat_source_compare()
+      
+      if(coding_notes != '')
+      {
+        
+        cat('\n\n')
+        cat('**Notes:**')
+        cat('\n\n')
+        cat(coding_notes)
+        cat('\n\n')
+        
+      }
+      
+    ## Creating output for categorical, one visit
+    } else 
+    {
+     
+      cat_source_compare()
+      
+      if(coding_notes != '')
+      {
+        
+        cat('\n\n')
+        cat('**Notes:**')
+        cat('\n\n')
+        cat(coding_notes)
+        cat('\n\n')
+        
+      }
+
+    }
+    
+    
+  }
+  
+}
+
+```

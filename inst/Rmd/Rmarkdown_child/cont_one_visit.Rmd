@@ -1,0 +1,47 @@
+```{r}
+
+  ## Table ---------
+  
+      table_summ <- data_intermediate %>%
+      group_by(cohort, visit) %>%
+      summarise(n = n(),
+                n_missing = sum(is.na(value)),
+                min = min(value, na.rm = TRUE),
+                Q1 = quantile(value, probs = c(0.25), na.rm = TRUE),
+                median = median(value, na.rm = TRUE),
+                Q3 = quantile(value, probs = c(0.75), na.rm = TRUE),
+                max = max(value, na.rm = TRUE),
+                mean = mean(value, na.rm = TRUE),
+                std = sd(value, na.rm = TRUE)) %>%
+      ungroup() %>%
+      mutate(n = format(n, big.mark = ','),
+             n_missing = format(n_missing, big.mark = ','),
+             min = round(min, digits = 1),
+             Q1 = round(Q1, digits = 1),
+             median = round(median, digits = 1),
+             Q3 = round(Q3, digits = 1),
+             max = round(max, digits = 1),
+             mean = round(mean, digits = 1),
+             std = round(std, digits = 1))
+  
+  kable(table_summ) %>%
+    kable_styling()
+  
+  
+  cat('\n')
+  cat('\n')
+
+
+  ## Plot ----------
+
+
+    ggplot(data_intermediate, aes(x = value)) +
+       geom_histogram(bins = 30) +
+       theme_bw() +
+       labs(title = glue('Distribution of {current_cat}')) +
+       xlab(units)
+    
+     cat('\n')
+     cat('\n')
+
+```

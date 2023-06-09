@@ -1,0 +1,100 @@
+---
+title: "Harmonization sheet instructions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Harmonization sheet instructions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+
+library(dplyr)
+library(knitr)
+library(stringr)
+library(tidyr)
+library(glue)
+library(purrr)
+
+library(psHarmonize)
+```
+
+
+The harmonization sheet is the input for the harmonization function. It also serves as the set of instructions for recoding (if any) of your variables.
+
+
+There are two different types of modifications you can choose from:
+ - Recode category
+ - Function
+ 
+## Recode category
+
+Recode category will let you change values of a categorizal variable. For example, if you have a variable with values of 1s and 0s, and you want your harmonized variable to have "Yes"s and "No"s, you can use the recode category option.
+
+
+Cohort A has an education variable with the values of 1-5. They correspond to values such as "No education", "Completed grade school", etc. 
+
+If we want to harmonize these values from 1-5, to harmonized values, we can use the `recode category` option. In this example we will harmonize the coded values to "No education/grade school", "High school", and "College".
+
+The table below shows how these values relate to each other.
+
+Coded values | Coded value meaning    | Harmonized values
+-------------|------------------------|---------------------------
+1            | No education           | No education/grade school
+2            | Completed grade school | No education/grade school
+3            | Jr-High School         | High school
+4            | Completed High School  | High school
+5            | Some college           | College
+
+
+In the harmonization sheet you will want to enter `recode category` in the `code_type` column.  You will then type the code pairings in the `code1` column with an `=` sign (`1 = Yes` for example).
+
+```{r}
+
+harmonization_sheet_example %>%
+  filter(study == 'Cohort A' & item == 'education') %>%
+  select(code_type, code1) %>%
+  kable()
+
+```
+
+The harmonization function will then code every value that is a 1 as "No education/grade school", 2 as "No education/grade school", etc.
+
+
+## Function
+
+If you want to convert a continuous variable (lbs to kg for example), you can use the `function` option. To do this you would enter `function` into `code_type`. In `code1` you would enter a function, with `x` as your input variable.
+
+
+For example, Cohort A has weight variables stored as pounds. If we want to convert these values to kilograms, we can enter the following into `code`: `x / 2.205`.
+
+```{r}
+
+harmonization_sheet_example %>%
+  filter(study == 'Cohort A' & item == 'weight') %>%
+  select(code_type, code1) %>%
+  kable()
+
+```
+
+
+## Functions (multiple variables input)
+
+If you have a function that requires multiple variables as input, you can add multiple `source_item` variables seperated by a semicolon:
+
+`var_1; var_2`
+
+You can then refer to the variables in `code1` by x1, x2, etc. If you wanted to add the two variables together you could write the following in `code1`.
+
+`x1 + x2`
+
+## Multi step variables
+
+If you need to refer to a variable you previously made you can use "previous_dataset" in `source_dataset`. Make sure to refer to the variables as their new names (in `item`), and use "ID" as the `id_var`.

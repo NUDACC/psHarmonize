@@ -1,0 +1,31 @@
+Package: psHarmonize
+Title: Creates harmonized dataset based on set of instructions
+Version: 0.2.2
+Authors@R: 
+    person(given = "John",
+           family = "Stephen",
+           role = c("aut", "cre"),
+           email = "John.Stephen@northwestern.edu",
+           comment = c(ORCID = "0000-0001-7309-9193"))
+Description: Creates harmonized dataset from multiple different datasets. Uses a harmonization sheet as a set of coding instructions. Package allows for long and/or wide dataset as output. Package also creates error log.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    dplyr,
+    glue,
+    magrittr,
+    purrr,
+    rlang,
+    rmarkdown,
+    stringr,
+    tidyr
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
+Config/testthat/edition: 3

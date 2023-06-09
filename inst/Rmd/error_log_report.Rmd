@@ -1,0 +1,80 @@
+---
+title: "Error Log"
+date: "`r format(Sys.Date(), '%m/%d/%Y')`"
+output: html_document
+params:
+  error_log: harmonization_object$error_log
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+library(knitr)
+library(janitor)
+library(kableExtra)
+
+error_log <- params$error_log
+
+```
+
+
+# Error log report
+
+## Overall status
+
+Status of variables harmonized:
+
+```{r}
+
+error_log %>%
+  tabyl(completed_status) %>%
+  adorn_totals(where = 'row') %>%
+  adorn_pct_formatting() %>%
+  kable() %>%
+  kable_styling()
+
+
+```
+
+
+Reasons variables were not harmonized:
+
+```{r}
+error_log %>%
+  filter(completed_status == 'Not completed') %>%
+  tabyl(completed_reason) %>%
+  adorn_totals(where = 'row') %>%
+  adorn_pct_formatting() %>%
+  kable() %>%
+  kable_styling()
+
+```
+
+
+## Variables set to NA (out of range)
+
+
+
+```{r}
+
+error_log %>%
+  summarise(num_vars_range = sum(!is.na(possible_range)),
+            num_vars_set_to_na = sum(range_set_to_na > 0, na.rm = TRUE)) %>%
+  pivot_longer(cols = everything()) %>%
+  kable() %>%
+  kable_styling()
+
+```
+
+
+
+```{r}
+
+error_log %>%
+  filter(range_set_to_na > 0) %>%
+  kable() %>%
+  kable_styling()
+
+```
+

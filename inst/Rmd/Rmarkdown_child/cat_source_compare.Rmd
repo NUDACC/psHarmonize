@@ -1,0 +1,56 @@
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+
+
+  # Preparing data before creating table ---------
+
+  ## Recordering visits
+
+  unique_visits <- unique(data_intermediate$visit) %>%
+    sort()
+  
+  # Looping through visits ---------
+  # Create table for each visit
+  
+  for(current_visit in unique_visits)
+  {
+    
+  
+  cat(paste0('**Visit ', current_visit, ':**'))
+    
+  cat('\n')
+  cat('\n')
+  
+  ## Creating table of frequencies
+count_ns <- data_intermediate %>%
+  filter(visit == current_visit) %>%
+  tabyl(source_value, value) %>%
+  adorn_totals(where = 'row') %>%
+  mutate(across(.fns = ~ format(.x, big.mark = ',')))
+
+
+## Adding percentages and formatting
+table_output <- data_intermediate %>%
+  filter(visit == current_visit) %>%
+  tabyl(source_value, value) %>%
+  adorn_percentages(denominator = 'col') %>%
+  adorn_totals(where = 'row') %>%
+  adorn_pct_formatting(digits = 1) %>%
+  adorn_ns(ns = count_ns, position = 'front')
+
+
+## Print table
+table_output %>%
+  kable() %>%
+  kable_styling() %>%
+  row_spec(row = nrow(table_output), bold = TRUE) %>%
+  cat()
+
+
+ cat('\n')
+ cat('\n')
+
+  }
+
+
+
+```
