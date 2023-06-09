@@ -1,6 +1,6 @@
 # psHarmonize 0.2.3
 
-# psHarmonize
+* Added warning message
 
 # psHarmonize 0.2.2
 
