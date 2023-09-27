@@ -140,12 +140,13 @@ harmonization <- function(harmonization_sheet,
 
     # Dataset for subdomain
     # For data with non missing visit
-    intermediate <- intermediate_list$final_dataset %>%
-      filter(!is.na(visit))
+    intermediate <- intermediate_list$final_dataset 
 
     # Joining onto longitudinal dataset
     if(exists('intermediate') & !is.null(intermediate))
     {
+      intermediate <- intermediate %>%
+        filter(!is.na(visit))
       if(nrow(intermediate) > 0)
       {
         combined_long_dataset <- combined_long_dataset %>%
@@ -157,12 +158,13 @@ harmonization <- function(harmonization_sheet,
 
     # Dataset for subdomain
     # For data with missing visit (time invariant)
-    intermediate_time_invariant <- intermediate_list$final_dataset %>%
-      filter(is.na(visit))
+    intermediate_time_invariant <- intermediate_list$final_dataset 
 
     # Joining onto time invariant dataset
     if(exists('intermediate_time_invariant') & !is.null(intermediate_time_invariant))
     {
+      intermediate_time_invariant <- intermediate_time_invariant %>%
+        filter(is.na(visit))
       if(nrow(intermediate_time_invariant) > 0)
       {
         combined_time_invariant <- combined_time_invariant %>%
