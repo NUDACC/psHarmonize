@@ -10,6 +10,7 @@
 ## Creating table of frequencies
 count_ns <- tabyl(data_intermediate, value, visit, show_missing_levels = FALSE) %>%
   relocate(value, var_list_order) %>%
+  untabyl() %>%
   adorn_totals(where = 'row') %>%
   mutate(across(.fns = ~ format(.x, big.mark = ',')))
 
@@ -17,6 +18,7 @@ count_ns <- tabyl(data_intermediate, value, visit, show_missing_levels = FALSE) 
 ## Adding percentages and formatting
 table_output <- tabyl(data_intermediate, value, visit, show_missing_levels = FALSE) %>%
   relocate(value, var_list_order) %>%
+  untabyl() %>%
   adorn_percentages(denominator = 'col') %>%
   adorn_totals(where = 'row') %>%
   adorn_pct_formatting(digits = 1) %>%
