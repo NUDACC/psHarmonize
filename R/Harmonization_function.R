@@ -149,9 +149,16 @@ harmonization <- function(harmonization_sheet,
         filter(!is.na(visit))
       if(nrow(intermediate) > 0)
       {
+        oldNrows=nrow(combined_long_dataset)
         combined_long_dataset <- combined_long_dataset %>%
           left_join(y = intermediate, by = c('cohort' = 'cohort', 'ID' = 'ID', 'visit' = 'visit')) %>%
           relocate(cohort, ID, visit)
+        newNrows=nrow(combined_long_dataset)
+        if(newNrows>oldNrows) {
+          combined_long_dataset<<-combined_long_dataset
+          intermediate <<- intermediate
+          stop('Many-to-many merge detected; check data for duplicated IDs')
+        }
 
       }
     }
