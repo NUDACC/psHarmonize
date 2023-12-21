@@ -86,7 +86,7 @@ cohorts <- unique(harmonized_long_dataset$cohort)
 
 ```{r Output, results='asis'}
 
-
+#each cohort separately
 for(current_cohort in cohorts)
 {
   
@@ -95,7 +95,7 @@ for(current_cohort in cohorts)
   cat('\n')
   cat('<hr>')
   cat('\n\n')
-
+  
   for(current_cat in categories)
   {
     
@@ -104,7 +104,7 @@ for(current_cohort in cohorts)
     cat('\n')
     cat('<hr>')
     cat('\n\n')
-
+    
     
     ## Identify type of variable in harmonized dataset
     ## and display the appropriate output
@@ -121,7 +121,7 @@ for(current_cohort in cohorts)
     
     if('final_units' %in% names(harmonization_sheet))
     {
-    
+      
       units <- harmonization_sheet %>%
         filter(study == current_cohort & item == current_cat) %>%
         filter(!is.na(final_units) & !(final_units == '') & !(final_units == ' ')) %>%
@@ -143,7 +143,7 @@ for(current_cohort in cohorts)
     
     if('coding_notes' %in% names(harmonization_sheet))
     {
-    
+      
       coding_notes <- harmonization_sheet %>%
         filter(study == current_cohort & item == current_cat) %>%
         filter(!is.na(coding_notes) & !(coding_notes == '') & !(coding_notes == ' ')) %>%
@@ -159,15 +159,15 @@ for(current_cohort in cohorts)
     {
       coding_notes <- ''
     }
-
+    
     
     
     ## Preparing data for output
     data_intermediate <- long_dataset %>%
-      filter(cohort == {{ current_cohort }}) %>%
+      filter(cohort == current_cohort ) %>%
       rename(value = {{ current_cat }})
     
-
+    
     ## Creating output for continuous, multiple visits
     if(num_unique_val > 10 & num_visits > 1 & is.numeric(long_dataset[[current_cat]]))
     {
@@ -186,8 +186,8 @@ for(current_cohort in cohorts)
       }
       
       
-    
-    ## Creating output for continuous, one visit
+      
+      ## Creating output for continuous, one visit
     } else if (num_unique_val > 10 & num_visits == 1 & is.numeric(long_dataset[[current_cat]])) {
       
       # Identify which visit
@@ -199,7 +199,7 @@ for(current_cohort in cohorts)
       # Limit to visit
       data_intermediate <- data_intermediate %>%
         filter(visit == visit_to_use)
-    
+      
       cont_one_visit()
       
       if(coding_notes != '')
@@ -212,12 +212,12 @@ for(current_cohort in cohorts)
         cat('\n\n')
         
       }
-
-    
-    ## Creating output for categorical, multiple visits
+      
+      
+      ## Creating output for categorical, multiple visits
     } else if (num_visits > 1 & is.character(long_dataset[[current_cat]]))
     {
-  
+      
       cat_multi_visit()
       
       if(coding_notes != '')
@@ -230,12 +230,12 @@ for(current_cohort in cohorts)
         cat('\n\n')
         
       }
-
-    
-    ## Creating output for categorical, one visit
-    } else 
+      
+      
+      ## Creating output for categorical, one visit
+    } else if(is.character(long_dataset[[current_cat]]))
     {
-     
+      
       cat_multi_visit()
       
       if(coding_notes != '')
@@ -248,13 +248,186 @@ for(current_cohort in cohorts)
         cat('\n\n')
         
       }
-
-
+      
+      
     }
     
     
   }
   
 }
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+#all cohorts together
+cat('\n')
+cat(paste0('## All Cohorts {.tabset}'))
+cat('\n')
+cat('<hr>')
+cat('\n\n')
+
+for(current_cat in categories)
+{
+  
+  cat('\n')
+  cat(paste0('### ', current_cat, ' {.tabset}'))
+  cat('\n')
+  cat('<hr>')
+  cat('\n\n')
+  
+  
+  ## Identify type of variable in harmonized dataset
+  ## and display the appropriate output
+  
+  num_unique_val <- length(unique(long_dataset[[current_cat]]))
+  
+  num_visits <- long_dataset %>%
+    filter(cohort %in% cohorts & !is.na(eval(parse(text = current_cat)))) %>%
+    summarise(num_visits = n_distinct(visit)) %>%
+    pull(num_visits)
+  
+  
+  ## Obtaining units (if present)
+  
+  if('final_units' %in% names(harmonization_sheet))
+  {
+    
+    units <- harmonization_sheet %>%
+      filter(study %in% cohorts & item == current_cat) %>%
+      filter(!is.na(final_units) & !(final_units == '') & !(final_units == ' ')) %>%
+      distinct(final_units) %>%
+      pull(final_units)
+    
+    if(length(units) > 1 || length(units) == 0 || is.na(units) || units == '' || units == ' ')
+    {
+      units <- 'value'
+    }
+    
+  } else
+  {
+    units <- 'value'
+  }
+  
+  
+  ## Obtaining coding notes (if present)
+  
+  if('coding_notes' %in% names(harmonization_sheet))
+  {
+    
+    coding_notes <- harmonization_sheet %>%
+      filter(study %in% cohorts & item == current_cat) %>%
+      filter(!is.na(coding_notes) & !(coding_notes == '') & !(coding_notes == ' ')) %>%
+      distinct(coding_notes) %>%
+      pull(coding_notes)
+    
+    if(length(coding_notes) > 1 || length(coding_notes) == 0 || is.na(coding_notes) || coding_notes == '' || coding_notes == ' ')
+    {
+      coding_notes <- ''
+    }
+    
+  } else
+  {
+    coding_notes <- ''
+  }
+  
+  
+  
+  ## Preparing data for output
+  data_intermediate <- long_dataset %>%
+    filter(cohort %in% cohorts) %>%
+    rename(value = {{ current_cat }}) %>%
+    #concatenate cohort to visit for display
+    mutate(visit=paste0(cohort,'::',visit))
+  
+  
+  ## Creating output for continuous, multiple visits
+  if(num_unique_val > 10 & num_visits > 1 & is.numeric(long_dataset[[current_cat]]))
+  {
+    
+    cont_multi_visit()
+    
+    if(coding_notes != '')
+    {
+      
+      cat('\n\n')
+      cat('**Notes:**')
+      cat('\n\n')
+      cat(coding_notes)
+      cat('\n\n')
+      
+    }
+    
+    
+    
+    ## Creating output for continuous, one visit
+  } else if (num_unique_val > 10 & num_visits == 1 & is.numeric(long_dataset[[current_cat]])) {
+    
+    # Identify which visit
+    visit_to_use <- data_intermediate %>%
+      filter(cohort %in% cohorts & !is.na(value)) %>%
+      distinct(visit) %>%
+      pull(visit)
+    
+    # Limit to visit
+    data_intermediate <- data_intermediate %>%
+      filter(visit == visit_to_use)
+    
+    cont_one_visit()
+    
+    if(coding_notes != '')
+    {
+      
+      cat('\n\n')
+      cat('**Notes:**')
+      cat('\n\n')
+      cat(coding_notes)
+      cat('\n\n')
+      
+    }
+    
+    
+    ## Creating output for categorical, multiple visits
+  } else if (num_visits > 1 & is.character(long_dataset[[current_cat]]))
+  {
+    
+    cat_multi_visit()
+    
+    if(coding_notes != '')
+    {
+      
+      cat('\n\n')
+      cat('**Notes:**')
+      cat('\n\n')
+      cat(coding_notes)
+      cat('\n\n')
+      
+    }
+    
+    
+    ## Creating output for categorical, one visit
+  } else
+  {
+    
+    cat_multi_visit()
+    
+    if(coding_notes != '')
+    {
+      
+      cat('\n\n')
+      cat('**Notes:**')
+      cat('\n\n')
+      cat(coding_notes)
+      cat('\n\n')
+      
+    }
+    
+    
+  }
+  
+  
+}
+
 
 ```

@@ -38,10 +38,12 @@ ggplot(data_intermediate, aes(x = factor(visit), y = value, fill = factor(visit)
   theme_bw() +
   labs(
     title = glue('Boxplots of {current_cat}'),
-    subtitle = current_cohort,
+    # subtitle = current_cohort,
     fill = 'Visit') +
   #scale_fill_brewer(palette = 'Set1') +
   scale_fill_manual(values = combined_color_palette) + ## Color palette that accommodates more values
+  theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
+  facet_grid(~cohort,scales='free_x') + 
   #theme(axis.text.x = element_blank()) +
   ylab(units) +
   xlab('Visit')

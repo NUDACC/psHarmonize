@@ -9,14 +9,14 @@
 
 ## Creating table of frequencies
 count_ns <- tabyl(data_intermediate, value, visit, show_missing_levels = FALSE) %>%
-  relocate(value, var_list_order) %>%
+  # relocate(value, var_list_order) %>%
   adorn_totals(where = 'row') %>%
   mutate(across(.fns = ~ format(.x, big.mark = ',')))
 
 
 ## Adding percentages and formatting
 table_output <- tabyl(data_intermediate, value, visit, show_missing_levels = FALSE) %>%
-  relocate(value, var_list_order) %>%
+  # relocate(value, var_list_order) %>%
   adorn_percentages(denominator = 'col') %>%
   adorn_totals(where = 'row') %>%
   adorn_pct_formatting(digits = 1) %>%
@@ -35,53 +35,56 @@ table_output %>%
 
  cat('\n')
  cat('\n')
-  
+
 
   ## Plot of percentages
 
  # Determine if manual color scale can be used
  
- if(length(unique(data_intermediate$value)) > length(combined_color_palette))
+ if(length(unique(na.omit(data_intermediate$value))) > length(combined_color_palette))
  {
   
    # Doesn't use our manual color scale, uses R's default colors
    # Removes legend. (takes up too much space with a ton of values)
    
   data_intermediate %>%
-    group_by(visit, value) %>%
+    group_by(visit, value, cohort) %>%
     count() %>%
     ggplot(aes(y = n, x = factor(visit), fill = value)) + 
     geom_bar(stat = 'identity', position = 'fill') +
     theme_bw() +
     labs(
       title = paste0('Percentage of ', current_cat),
-      subtitle = current_cohort,
+      # subtitle = current_cohort,
       fill = element_blank()) +
-     theme(legend.position = 'none') +
+    theme(legend.position = 'none',
+          axis.text.x=element_text(angle = -90, hjust = 0)) +
     scale_y_continuous(labels = scales::percent_format()) +
+    facet_grid(~cohort,scales='free_x') + 
     xlab('Visit') +
     ylab('Percentage')  
-
- } else 
- {
-
+  
+} else if(!all(is.na(data_intermediate$value))) #don't try to plot if all NA
+{
+  
   data_intermediate %>%
-    group_by(visit, value) %>%
+    group_by(visit, value, cohort) %>%
     count() %>%
     ggplot(aes(y = n, x = factor(visit), fill = value)) + 
     geom_bar(stat = 'identity', position = 'fill') +
-    theme_bw() +
+    theme_bw() + theme(axis.text.x=element_text(angle = -90, hjust = 0)) +
     labs(
       title = paste0('Percentage of ', current_cat),
-      subtitle = current_cohort,
+      # subtitle = current_cohort,
       fill = element_blank()) +
-    scale_fill_manual(values = combined_color_palette) + ## Color palette that accommodates more values
+    # scale_fill_manual(values = combined_color_palette) + ## Color palette that accommodates more values
     scale_y_continuous(labels = scales::percent_format()) +
+    facet_grid(~cohort,scales='free_x') + 
     xlab('Visit') +
     ylab('Percentage')  
-   
- }
-   
+  
+}
+
 
 
 
