@@ -1,7 +1,11 @@
 ---
-title: "Error Log"
+title: "psHarmonize Error Log"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
-output: html_document
+output: 
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: true
 params:
   error_log: harmonization_object$error_log
 ---
@@ -19,11 +23,9 @@ error_log <- params$error_log
 ```
 
 
-# Error log report
+# Harmonization completed status:
 
-## Overall status
-
-Status of variables harmonized:
+<br>
 
 ```{r}
 
@@ -31,50 +33,136 @@ error_log %>%
   tabyl(completed_status) %>%
   adorn_totals(where = 'row') %>%
   adorn_pct_formatting() %>%
-  kable() %>%
-  kable_styling()
+  kable(align = 'lrr') %>%
+  kable_styling(full_width = F) %>%
+  column_spec(column = 1, width = '2in') %>%
+  column_spec(column = 2, width = '1in') %>%
+  column_spec(column = 3, width = '1in') 
+
+```
+
+<br>
+
+```{r, results='asis'}
+
+vars_not_completed <- any(error_log$completed_status == 'Not completed')
+
+if(vars_not_completed)
+{
+  
+  cat('\n\n')
+  cat('## Reasons variables were not harmonized: \n\n')
+  cat('\n\n')
+  
+  error_log %>%
+    filter(completed_status == 'Not completed') %>%
+    tabyl(completed_reason) %>%
+    adorn_totals(where = 'row') %>%
+    adorn_pct_formatting() %>%
+    kable(align = 'lrr') %>%
+    kable_styling(full_width = F) %>%
+    column_spec(column = 1, width = '2in') %>%
+    column_spec(column = 2, width = '1in') %>%
+    column_spec(column = 3, width = '1in') %>%
+    cat()
+  
+  cat('<br>')
+  
+  cat('\n\n')
+  cat('## Variables not harmonized: \n\n')
+  cat('\n\n')
+  
+  error_log %>%
+    filter(completed_status == 'Not completed') %>%
+    select(study, item, visit, completed_reason) %>%
+    kable(align = 'llrl') %>%
+    kable_styling(full_width = F) %>%
+    column_spec(column = 1, width = '2in') %>%
+    column_spec(column = 2, width = '2in') %>%
+    column_spec(column = 3, width = '1in') %>%
+    column_spec(column = 4, width = '2in') %>%
+    cat()
+
+}
 
 
 ```
 
+<br>
 
-Reasons variables were not harmonized:
+# Variables set to NA (out of range)
+
+<br>
+
 
 ```{r}
-error_log %>%
-  filter(completed_status == 'Not completed') %>%
-  tabyl(completed_reason) %>%
-  adorn_totals(where = 'row') %>%
-  adorn_pct_formatting() %>%
-  kable() %>%
-  kable_styling()
+
+# Number of variables where possible_range was used
+num_vars_range <- sum(!is.na(error_log$possible_range) & error_log$possible_range != '', na.rm = T)
+  
+# Number of variables where values where set to NA, due to possible range
+num_vars_set_to_na = sum(error_log$range_set_to_na > 0, na.rm = T)
 
 ```
 
 
-## Variables set to NA (out of range)
+Number of variables with a possible range set (column `possible_range` ): `r num_vars_range`
 
+Number of variables with values out of possible range (set to NA): `r num_vars_set_to_na`
 
+<br>
 
-```{r}
+```{r, results='asis'}
 
-error_log %>%
-  summarise(num_vars_range = sum(!is.na(possible_range)),
-            num_vars_set_to_na = sum(range_set_to_na > 0, na.rm = TRUE)) %>%
-  pivot_longer(cols = everything()) %>%
-  kable() %>%
-  kable_styling()
+if(num_vars_range)
+{
+
+  cat('\n\n')
+  cat('## variables with a possible range: \n\n')
+  cat('\n\n')
+  
+  cat('<br>')
+
+  error_log %>%
+    filter(!is.na(possible_range) & possible_range != '') %>%
+    select(study, item, visit, possible_range) %>%
+    kable(align = 'llrr') %>%
+    kable_styling(full_width = F) %>%
+    column_spec(column = 1, width = '2in') %>%
+    column_spec(column = 2, width = '2in') %>%
+    column_spec(column = 3, width = '1in') %>%
+    column_spec(column = 4, width = '2in') %>%
+    cat()
+
+}
+
+cat('<br>')
+
+if(num_vars_set_to_na)
+{
+
+  cat('\n\n')
+  cat('## Variables with values out of possible range (set to NA): \n\n')
+  cat('\n\n')
+  
+  cat('<br>')
+
+  error_log %>%
+    filter(range_set_to_na > 0) %>%
+    select(study, item, visit, possible_range, range_set_to_na) %>%
+    kable(align = 'llrrr') %>%
+    kable_styling(full_width = F) %>%
+    column_spec(column = 1, width = '2in') %>%
+    column_spec(column = 2, width = '2in') %>%
+    column_spec(column = 3, width = '1in') %>%
+    column_spec(column = 4, width = '2in') %>%
+    column_spec(column = 4, width = '2in') %>%
+    cat()
+
+}
 
 ```
 
+<br>
 
-
-```{r}
-
-error_log %>%
-  filter(range_set_to_na > 0) %>%
-  kable() %>%
-  kable_styling()
-
-```
-
+Created using `psHarmonize`version: `r packageVersion('psHarmonize')`
