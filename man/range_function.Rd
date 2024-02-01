@@ -17,12 +17,6 @@ range_function(
 
 \item{new_var}{New variable}
 }
-\value{
-
-}
 \description{
 Range function. To be called by harmonization function.
-}
-\examples{
-
 }

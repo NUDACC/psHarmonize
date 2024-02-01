@@ -32,12 +32,6 @@ code_modify_func_multi(
 
 \item{cohort}{Cohort name}
 }
-\value{
-
-}
 \description{
 Code modify function (multiple variables). To be called by the harmonization function.
-}
-\examples{
-
 }

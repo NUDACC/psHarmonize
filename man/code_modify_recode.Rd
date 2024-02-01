@@ -23,12 +23,6 @@ code_modify_recode(
 
 \item{na_string}{Character string of final recode value to be set to NA.}
 }
-\value{
-
-}
 \description{
 Code modify recode.
-}
-\examples{
-
 }

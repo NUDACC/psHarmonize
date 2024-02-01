@@ -17,6 +17,3 @@ Returns harmonized data.frame.
 \description{
 Reorder factors data.frame
 }
-\examples{
-
-}

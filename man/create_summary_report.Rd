@@ -20,12 +20,6 @@ create_summary_report(
 
 \item{compare}{Creates summary report with comparison of raw values with modified values}
 }
-\value{
-
-}
 \description{
 Summary report creation
-}
-\examples{
-
 }

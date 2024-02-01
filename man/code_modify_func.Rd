@@ -17,12 +17,6 @@ code_modify_func(
 
 \item{old_var}{Name of original variable}
 }
-\value{
-
-}
 \description{
 Code modify function. To be called by the harmonization function.
-}
-\examples{
-
 }

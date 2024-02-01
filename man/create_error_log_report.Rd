@@ -17,12 +17,6 @@ create_error_log_report(
 
 \item{file}{Filename of output R Markdown report}
 }
-\value{
-
-}
 \description{
 Error log report creation
-}
-\examples{
-
 }

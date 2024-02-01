@@ -9,12 +9,6 @@ cohort_shell_func(sheet)
 \arguments{
 \item{sheet}{Harmonization sheet}
 }
-\value{
-
-}
 \description{
 Cohort sheet create. To be called by harmonization function.
-}
-\examples{
-
 }
