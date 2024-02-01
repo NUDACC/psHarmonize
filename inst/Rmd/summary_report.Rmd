@@ -1,5 +1,5 @@
 ---
-title: "Harmonized summary Report"
+title: "psHarmonize Summary Report"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 output: 
   html_document:
@@ -34,8 +34,18 @@ harmonized_long_dataset <- long_dataset
 
 cont_one_visit <- function(){
 
-  output <- knitr::knit_child("./RMarkdown_child/cont_one_visit.Rmd", quiet = TRUE)
-   
+  output <- tryCatch(
+    {
+      knitr::knit_child("./RMarkdown_child/cont_one_visit.Rmd", quiet = TRUE)
+    }, error = function(e)
+    {
+      paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+    }, warning = function(w)
+    {
+      paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+    }
+  )
+    
   cat(output, '   ', sep = '\n\n')
   
 }
@@ -44,8 +54,18 @@ cont_one_visit <- function(){
 
 cont_multi_visit <- function(){
 
-  output <- knitr::knit_child("./RMarkdown_child/cont_multi_visit.Rmd", quiet = TRUE)
-   
+    output <- tryCatch(
+    {
+      knitr::knit_child("./RMarkdown_child/cont_multi_visit.Rmd", quiet = TRUE)
+    }, error = function(e)
+    {
+      paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+    }, warning = function(w)
+    {
+      paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+    }
+  )
+
   cat(output, '   ', sep = '\n\n')
   
 }
@@ -54,7 +74,17 @@ cont_multi_visit <- function(){
 
 cat_multi_visit <- function(){
 
-  output <- knitr::knit_child("./RMarkdown_child/cat_multi_visit.Rmd", quiet = TRUE)
+  output <- tryCatch(
+    {
+      knitr::knit_child("./RMarkdown_child/cat_multi_visit.Rmd", quiet = TRUE)
+    }, error = function(e)
+    {
+      paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+    }, warning = function(w)
+    {
+      paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+    }
+  )
    
   cat(output, '   ', sep = '\n\n')
   
