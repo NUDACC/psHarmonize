@@ -265,6 +265,8 @@ for(current_cohort in cohorts)
 
     }
     
+  cat('<br>\n\n')
+  cat(paste0("Created using `psHarmonize` version: ", packageVersion('psHarmonize'), '\n\n'))
     
   }
   
