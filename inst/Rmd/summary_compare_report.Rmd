@@ -29,8 +29,17 @@ harmonized_long_dataset <- long_dataset
 
 cont_multi_visit_compare <- function(){
 
-  output <- knitr::knit_child('./Rmarkdown_child/cont_multi_visit_compare.Rmd', quiet = TRUE)
-   
+  output <- tryCatch(
+  {
+    knitr::knit_child("./RMarkdown_child/cont_multi_visit_compare.Rmd", quiet = TRUE)
+  }, error = function(e)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  }, warning = function(w)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  })
+
   cat(output, '   ', sep = '\n\n')
   
 }
@@ -38,7 +47,16 @@ cont_multi_visit_compare <- function(){
 
 cont_one_visit_compare <- function(){
 
-  output <- knitr::knit_child('./Rmarkdown_child/cont_one_visit_compare.Rmd', quiet = TRUE)
+  output <- tryCatch(
+  {
+    knitr::knit_child("./RMarkdown_child/cont_one_visit_compare.Rmd", quiet = TRUE)
+  }, error = function(e)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  }, warning = function(w)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  })
    
   cat(output, '   ', sep = '\n\n')
   
@@ -47,7 +65,16 @@ cont_one_visit_compare <- function(){
 
 cat_source_compare <- function(){
 
-  output <- knitr::knit_child('./Rmarkdown_child/cat_source_compare.Rmd', quiet = TRUE)
+  output <- tryCatch(
+  {
+    knitr::knit_child("./RMarkdown_child/cat_source_compare.Rmd", quiet = TRUE)
+  }, error = function(e)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  }, warning = function(w)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  })
    
   cat(output, '   ', sep = '\n\n')
   
@@ -177,6 +204,10 @@ for(current_cohort in cohorts)
       coding_notes <- ''
     }
 
+    
+    # If source variable not present, skip to next item
+    if(!(source_current_cat %in% names(long_dataset)))
+      next
 
     ## Preparing data for output
     data_intermediate <- long_dataset %>%
