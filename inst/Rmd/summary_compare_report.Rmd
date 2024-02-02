@@ -91,7 +91,7 @@ cat_source_compare <- function(){
 # IDing columns that are not ID, cohort, or visit
 # Also not outputting source variables at the moment
 
-categories <- names(harmonized_long_dataset)[grepl('^cohort$|^ID$|^visit$|^source_', names(harmonized_long_dataset), ignore.case = TRUE) == FALSE]
+categories <- names(harmonized_long_dataset)[grepl('^cohort$|^ID$|^denom$|^visit$|^source_', names(harmonized_long_dataset), ignore.case = TRUE) == FALSE]
 
 cohorts <- unique(harmonized_long_dataset$cohort)
 
