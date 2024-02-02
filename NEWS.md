@@ -1,3 +1,5 @@
+# psHarmonize 0.2.6
+
 # psHarmonize 0.2.5
 
 # psHarmonize 0.2.4
