@@ -1,5 +1,5 @@
 ---
-title: "Harmonized summary comparison Report"
+title: "psHarmonize Summary Comparison Report"
 date: "`r format(Sys.Date(), '%m/%d/%Y')`"
 output: 
   html_document:
