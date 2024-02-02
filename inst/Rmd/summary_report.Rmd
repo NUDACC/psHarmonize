@@ -46,8 +46,6 @@ cont_one_visit <- function(){
     }
   )
     
-  cat(output, '   ', sep = '\n\n')
-  
 }
 
 # cont_multi_visit
@@ -66,8 +64,6 @@ cont_multi_visit <- function(){
     }
   )
 
-  cat(output, '   ', sep = '\n\n')
-  
 }
 
 # cat_multi_visit
@@ -86,8 +82,6 @@ cat_multi_visit <- function(){
     }
   )
    
-  cat(output, '   ', sep = '\n\n')
-  
 }
 
 # cat_one_visit
@@ -279,7 +273,10 @@ for(current_cohort in cohorts)
 
     }
     
-    
+  cat(output, '   ', sep = '\n\n')
+  cat('<br>\n\n')
+  cat(paste0("Created using `psHarmonize` version: ", packageVersion('psHarmonize'), '\n\n'))
+
   }
   
 }
