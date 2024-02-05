@@ -3,7 +3,7 @@
 
   # Preparing data before creating table ---------
 
-  ## Recordering visits
+  ## Reordering visits
 
   unique_visits <- unique(data_intermediate$visit) %>%
     sort()
