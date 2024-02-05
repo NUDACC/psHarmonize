@@ -129,11 +129,8 @@ for(current_cohort in cohorts)
     ## and display the appropriate output
     
     num_unique_val <- length(unique(long_dataset[[current_cat]]))
-    
-    num_visits <- long_dataset %>%
-      filter(cohort == current_cohort & !is.na(eval(parse(text = current_cat)))) %>%
-      summarise(num_visits = n_distinct(visit)) %>%
-      pull(num_visits)
+
+    num_visits <- length(unique(long_dataset[!is.na(long_dataset$cohort) & long_dataset$cohort == current_cohort & !is.na(long_dataset[[current_cat]]),][['visit']]))
     
     
     source_current_cat <- paste0('source_', current_cat)
