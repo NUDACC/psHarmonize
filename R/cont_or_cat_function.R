@@ -1,12 +1,20 @@
 #' Continuous or categorical
 #'
-#' @param data
-#' @param var
+#' @param data Data frame
+#' @param var Variable
 #'
-#' @return
+#' @return Returns "continuous" or "categorical"
 #' @export
 #'
 #' @examples
+#'
+#' # Function can help determine which kind of output is
+#' # most appropriate
+#'
+#'cont_or_cat(data = cohort_a, var = 'height_1')
+#'
+#'cont_or_cat(data = cohort_a, var = 'education')
+#'
 cont_or_cat <- function(data, var)
 {
   if(!(var %in% names(data)))
