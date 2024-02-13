@@ -1,13 +1,72 @@
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
 
+visits_to_display <- harmonization_sheet[harmonization_sheet$study == current_cohort & harmonization_sheet$item == current_cat,][['visit']]
+
+visits_to_display <- sort(visits_to_display)
 
 # Code to compare multiple source variables to harmonized variable
+for(current_visit in visits_to_display)
+{
+  
+  cat('\n\n')
+  cat(paste0('#### Visit ', current_visit, ': \n\n'))
+  cat('\n\n')
+  
+  # Limit data to visit of interest
+  data_intermediate_mod <- data_intermediate %>%
+    filter(visit == current_visit)
 
+  
+  # ID source variables for visit
+  multi_source_vars <- harmonization_sheet[harmonization_sheet$study == current_cohort & harmonization_sheet$item == current_cat & harmonization_sheet$visit == current_visit,][['source_item']]
+  
+  multi_source_vars_num <- stringr::str_count(string = multi_source_vars, pattern = ';') + 1
+  
+  # separate by semi colon
+  multi_source_vars_each <- stringr::str_split(string = multi_source_vars, pattern = ';')
+  multi_source_vars_each <- multi_source_vars_each[[1]]
+  multi_source_vars_each <- stringr::str_trim(multi_source_vars_each)
+  
+  multi_source_vars_rename <- sapply(X = seq_len(length(multi_source_vars_each)), FUN = function(x){
+  paste0('source_', current_cat, x)
+})
 
+  names(multi_source_vars_rename) <- multi_source_vars_each
 
+  
+    # Determine variable type for harmonized variable
+  harmonized_var_type <- cont_or_cat(data = data_intermediate_mod, var = 'value')
+  
+  if(is.na(harmonized_var_type))
+    next
 
+  # Determine variable type for harmonized variable
+  # Creates character vector indicating continuous or categorical
+  source_vars_type <- sapply(X = multi_source_vars_each, FUN = function(x){
+    cont_or_cat(data = data_intermediate_mod, var = x)
+  })
+  
+  # Creating output based on source and harmonized 
+  if(harmonized_var_type == 'categorical' && length(source_vars_type) == 2 && all(source_vars_type) == 'continuous')
+  {
+    
+    
+  } else
+  {
+    # Take random sample of rows, and display table
+    set.seed(123)
+    rows_to_print <- sample(x = 1:nrow(data_intermediate_mod), size = 25, replace = F)
+    
+    data_intermediate_mod[rows_to_print,c(multi_source_vars_rename, 'value')] %>%
+      kable() %>%
+      kable_styling()
+    
+    cat('\n')
+    cat('\n')
+    
+  }
 
-
+}
 
 
 ```
