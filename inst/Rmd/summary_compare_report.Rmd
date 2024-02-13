@@ -81,6 +81,24 @@ cat_source_compare <- function(){
 }
 
 
+multi_source_compare <- function(){
+
+  output <- tryCatch(
+  {
+    knitr::knit_child("./RMarkdown_child/multi_source_compare.Rmd", quiet = TRUE)
+  }, error = function(e)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  }, warning = function(w)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  })
+   
+  cat(output, '   ', sep = '\n\n')
+  
+}
+
+
 ```
 
 
@@ -131,10 +149,6 @@ for(current_cohort in cohorts)
     num_unique_val <- length(unique(long_dataset[[current_cat]]))
 
     num_visits <- length(unique(long_dataset[!is.na(long_dataset$cohort) & long_dataset$cohort == current_cohort & !is.na(long_dataset[[current_cat]]),][['visit']]))
-    
-    
-    source_current_cat <- paste0('source_', current_cat)
-    
     
     ## Obtaining units (if present)
     
@@ -200,21 +214,71 @@ for(current_cohort in cohorts)
     {
       coding_notes <- ''
     }
+    
+    current_source_dataset_sheet <- harmonization_sheet[harmonization_sheet$study == current_cohort & harmonization_sheet$item == current_cat,c('visit','source_dataset')]
+    
+    # Check for semicolon
+    
+    if(any(grepl(pattern = ';', x = current_source_dataset_sheet$source_dataset)))
+    {
+      multi_source_cat_status <- TRUE
+    } else
+    {
+      multi_source_cat_status <- FALSE
+    }
 
+    
+    if(multi_source_cat_status)
+    {
+      source_current_cat <- NA
+    } else
+    {
+      source_current_cat <- paste0('source_', current_cat)
+    }
+    
     
     # If source variable not present, skip to next item
-    if(!(source_current_cat %in% names(long_dataset)))
-      next
+    if(multi_source_cat_status)
+    {
+     
+      data_intermediate <- long_dataset %>%
+        filter(cohort == {{ current_cohort }}) %>%
+        rename(value = {{ current_cat }})
 
-    ## Preparing data for output
-    data_intermediate <- long_dataset %>%
-      filter(cohort == {{ current_cohort }}) %>%
-      rename(value = {{ current_cat }},
-             source_value = {{ source_current_cat }})
+    }
+    else if(multi_source_cat_status == FALSE)
+    {
+      if(!(source_current_cat %in% names(long_dataset)))
+        next
+      
+      ## Preparing data for output
+      data_intermediate <- long_dataset %>%
+        filter(cohort == {{ current_cohort }}) %>%
+        rename(value = {{ current_cat }},
+               source_value = {{ source_current_cat }})
+
+    }
     
+    
+    ## Creating output for harmonized item if any visits
+    ## have multiple source variables
+    if(multi_source_cat_status)
+    {
+      
+      multi_source_compare()
+      
+      if(coding_notes != '')
+      {
+        
+        cat('\n\n')
+        cat('**Notes:**')
+        cat('\n\n')
+        cat(coding_notes)
+        cat('\n\n')
+        
+      }
 
-    ## Creating output for continuous, multiple visits
-    if(num_unique_val > 10 & num_visits > 1 & is.numeric(long_dataset[[current_cat]]))
+    } else if(num_unique_val > 10 & num_visits > 1 & is.numeric(long_dataset[[current_cat]]))     ## Creating output for continuous, multiple visits
     {
       
       cont_multi_visit_compare()
