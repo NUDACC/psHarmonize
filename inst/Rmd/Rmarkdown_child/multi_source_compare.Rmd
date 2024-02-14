@@ -1,4 +1,4 @@
-```{r, echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+```{r, results='asis'}
 
 visits_to_display <- harmonization_sheet[harmonization_sheet$study == current_cohort & harmonization_sheet$item == current_cat,][['visit']]
 
@@ -42,24 +42,41 @@ for(current_visit in visits_to_display)
 
   # Determine variable type for harmonized variable
   # Creates character vector indicating continuous or categorical
-  source_vars_type <- sapply(X = multi_source_vars_each, FUN = function(x){
+  source_vars_type <- sapply(X = multi_source_vars_rename, FUN = function(x){
     cont_or_cat(data = data_intermediate_mod, var = x)
   })
   
   # Creating output based on source and harmonized 
-  if(harmonized_var_type == 'categorical' && length(source_vars_type) == 2 && all(source_vars_type) == 'continuous')
+  if(harmonized_var_type == 'categorical' && length(source_vars_type) == 2 && all(source_vars_type == 'continuous'))
   {
     
     
   } else
   {
     # Take random sample of rows, and display table
+    # Also display source vars, code1, and code_type
     set.seed(123)
     rows_to_print <- sample(x = 1:nrow(data_intermediate_mod), size = 25, replace = F)
     
+    cat('<br>')
+    
+    cat('\n\n')
+    cat('**`source_item` value from harmonization sheet:** \n\n')
+    cat(multi_source_vars)
+    cat('\n\n')
+    
+    cat('<br>')
+    
+    cat('Displaying random sample of 25 rows of source variables and harmonized variable \n\n')
+    cat('\n\n')
+    
+    cat('<br>')
+    
     data_intermediate_mod[rows_to_print,c(multi_source_vars_rename, 'value')] %>%
+      rename({{ current_cat }} := value) %>%
       kable() %>%
-      kable_styling()
+      kable_styling() %>%
+      cat()
     
     cat('\n')
     cat('\n')
