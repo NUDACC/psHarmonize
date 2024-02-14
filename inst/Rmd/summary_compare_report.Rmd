@@ -215,11 +215,11 @@ for(current_cohort in cohorts)
       coding_notes <- ''
     }
     
-    current_source_dataset_sheet <- harmonization_sheet[harmonization_sheet$study == current_cohort & harmonization_sheet$item == current_cat,c('visit','source_dataset')]
+    current_source_item_sheet <- harmonization_sheet[harmonization_sheet$study == current_cohort & harmonization_sheet$item == current_cat,c('visit','source_item')]
     
     # Check for semicolon
     
-    if(any(grepl(pattern = ';', x = current_source_dataset_sheet$source_dataset)))
+    if(any(grepl(pattern = ';', x = current_source_item_sheet$source_item)))
     {
       multi_source_cat_status <- TRUE
     } else
