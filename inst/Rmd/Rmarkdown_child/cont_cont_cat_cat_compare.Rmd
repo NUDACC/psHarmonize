@@ -1,0 +1,99 @@
+```{r, results='asis'}
+
+# RMarkdown child called by multi_source_compare.Rmd
+
+# data_intermediate_mod is dataset already limited to visit of interest
+
+# Use multi_source_vars_each character vector to determine source variables.
+
+cont_source <- names(source_vars_type[source_vars_type == 'continuous'])
+cont_source_index <- which(names(multi_source_vars_rename) %in% cont_source)
+cont_source_rename <- multi_source_vars_rename[cont_source_index]
+
+cat_source <- names(source_vars_type[source_vars_type == 'categorical'])
+cat_source_index <- which(names(multi_source_vars_rename) %in% cat_source)
+cat_source_rename <- multi_source_vars_rename[cat_source_index]
+
+## Table ---------
+
+for(i in seq_len(length(cont_source_rename)))
+{
+
+  cat('\n\n')
+  cat(paste0('**Distribution of ', cont_source_rename[[i]],':**  \n\n'))
+  cat('\n\n')
+
+  table_summ <- data_intermediate_mod %>%
+  group_by(cohort, visit) %>%
+  summarise(n = n(),
+            n_missing = sum(is.na(.data[[cont_source_rename[[i]]]])),
+            min = min(.data[[cont_source_rename[[i]]]], na.rm = TRUE),
+            Q1 = quantile(.data[[cont_source_rename[[i]]]], probs = c(0.25), na.rm = TRUE),
+            median = median(.data[[cont_source_rename[[i]]]], na.rm = TRUE),
+            Q3 = quantile(.data[[cont_source_rename[[i]]]], probs = c(0.75), na.rm = TRUE),
+            max = max(.data[[cont_source_rename[[i]]]], na.rm = TRUE),
+            mean = mean(.data[[cont_source_rename[[i]]]], na.rm = TRUE),
+            std = sd(.data[[cont_source_rename[[i]]]], na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(n = format(n, big.mark = ','),
+         n_missing = format(n_missing, big.mark = ','),
+         min = round(min, digits = 1),
+         Q1 = round(Q1, digits = 1),
+         median = round(median, digits = 1),
+         Q3 = round(Q3, digits = 1),
+         max = round(max, digits = 1),
+         mean = round(mean, digits = 1),
+         std = round(std, digits = 1))
+
+  kable(table_summ) %>%
+    kable_styling() %>%
+  cat()
+  
+    
+}
+
+cat('\n\n')
+
+
+# Print harmonized categorical variable
+
+count_ns <- tabyl(data_intermediate_mod, value, show_missing_levels = FALSE) %>%
+  untabyl() %>%
+  adorn_totals(where = 'row') %>%
+  mutate(n = format(n, big.mark = ','))
+
+## Adding percentages and formatting
+table_output <- tabyl(data_intermediate_mod, value, show_missing_levels = FALSE) %>%
+  untabyl() %>%
+  adorn_percentages(denominator = 'col') %>%
+  adorn_totals(where = 'row') %>%
+  adorn_pct_formatting(digits = 1) %>%
+  adorn_ns(ns = count_ns, position = 'front')
+
+## Print table
+table_output %>%
+  kable() %>%
+  kable_styling() %>%
+  row_spec(row = nrow(table_output), bold = TRUE) %>%
+  cat()
+
+ cat('\n')
+ cat('\n')
+  
+
+
+# Plot ----------
+
+to_plot <- ggplot(data = data_intermediate_mod, aes(x = .data[[cont_source_rename[[1]]]], y = .data[[cont_source_rename[[2]]]], color = factor(.data[['value']]), shape = factor(.data[['value']]))) +
+  geom_point() +
+  facet_wrap(~ factor(.data[[cat_source_rename]])) +
+  theme_bw()
+
+ 
+ print(to_plot)
+ 
+cat('\n')
+cat('\n')
+
+ 
+```
