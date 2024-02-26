@@ -91,6 +91,24 @@ multi_source_compare <- function(){
     paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
   }, warning = function(w)
   {
+    knitr::knit_child("./RMarkdown_child/multi_source_compare.Rmd", quiet = TRUE)
+  })
+   
+  cat(output, '   ', sep = '\n\n')
+  
+}
+
+
+cont_cont_cat_cat_compare <- function(){
+
+  output <- tryCatch(
+  {
+    knitr::knit_child("./cont_cont_cat_cat_compare.Rmd", quiet = TRUE)
+  }, error = function(e)
+  {
+    paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
+  }, warning = function(w)
+  {
     paste0('Output for the variable ', current_cat, ' cannot be created.\n\n')
   })
    
