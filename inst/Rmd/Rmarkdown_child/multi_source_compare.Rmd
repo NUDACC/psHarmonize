@@ -47,9 +47,13 @@ for(current_visit in visits_to_display)
   })
   
   # Creating output based on source and harmonized 
-  if(harmonized_var_type == 'categorical' && length(source_vars_type) == 2 && all(source_vars_type == 'continuous'))
+  if(harmonized_var_type == 'categorical' && setequal(x = source_vars_type, y = c('continuous','continuous','categorical')))
   {
     
+    cont_cont_cat_cat_compare()
+    
+    cat('\n')
+    cat('\n')
     
   } else
   {
