@@ -1,10 +1,18 @@
 # psHarmonize 0.2.7
 
+* Added additional RMarkdown files for comparison reports, when multiple input variables are used.
+
 # psHarmonize 0.2.6
+
+* Fixed errors that occurred with some using `create_summary_report()` .
 
 # psHarmonize 0.2.5
 
+* Fixed error when using `create_error_log_report()`.
+
 # psHarmonize 0.2.4
+
+* Merged in pull request #1, that fixed error when source dataset was not present.
 
 # psHarmonize 0.2.3
 
