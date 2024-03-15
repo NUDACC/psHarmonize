@@ -1,3 +1,5 @@
+# psHarmonize 0.2.8
+
 # psHarmonize 0.2.7
 
 * Added additional RMarkdown files for comparison reports, when multiple input variables are used.
