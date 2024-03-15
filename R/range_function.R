@@ -95,7 +95,11 @@ range_function_cat <- function(data = temp_dataset,
                                new_var = item)
 {
 
-  new_value <- ifelse(data[[new_var]] %in% possible_vals_cat, data[[new_var]], NA)
+  # Split string input to create vector
+  possible_vals_cat_vector <- stringr::str_split(string = possible_vals_cat, pattern = '[,\\s]+')
+  possible_vals_cat_vector <- unlist(possible_vals_cat_vector)
+
+  new_value <- ifelse(data[[new_var]] %in% possible_vals_cat_vector, data[[new_var]], NA)
 
   ## Recording the number of values set to missing in error log
   orig_na <- sum(is.na(data[[new_var]]))
