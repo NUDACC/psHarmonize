@@ -85,12 +85,8 @@ harmonization <- function(harmonization_sheet,
 
   ## Checking that code_type is entered correctly if there is code in code1:
 
-  # num_rows_incorrectly_entered <- harmonization_sheet %>%
-  #   filter((is.na(code1) == FALSE | code1 != '') & (!(code_type %in% c('function','recode category')))) %>%
-  #   nrow()
-
   num_rows_incorrectly_entered <- harmonization_sheet %>%
-    filter((is.na(code1) == FALSE | code1 != '') &
+    filter((is.na(code1) == FALSE & code1 != '') &
            (!(substr(tolower(stringr::str_trim(code_type)),1,1) %in% c('f','r')))) %>%
     nrow()
 
@@ -140,7 +136,7 @@ harmonization <- function(harmonization_sheet,
 
     # Dataset for subdomain
     # For data with non missing visit
-    intermediate <- intermediate_list$final_dataset 
+    intermediate <- intermediate_list$final_dataset
 
     # Joining onto longitudinal dataset
     if(exists('intermediate') & !is.null(intermediate))
@@ -158,7 +154,7 @@ harmonization <- function(harmonization_sheet,
 
     # Dataset for subdomain
     # For data with missing visit (time invariant)
-    intermediate_time_invariant <- intermediate_list$final_dataset 
+    intermediate_time_invariant <- intermediate_list$final_dataset
 
     # Joining onto time invariant dataset
     if(exists('intermediate_time_invariant') & !is.null(intermediate_time_invariant))
