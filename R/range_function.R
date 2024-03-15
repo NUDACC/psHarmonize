@@ -77,3 +77,35 @@ range_function <- function(data = temp_dataset,
 
 }
 
+
+
+#' Possible values for categorical variables. To be called by harmonization function.
+#'
+#' @param data data to be modified
+#' @param possible_vals_cat vector of possible values
+#' @param new_var new variable
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+range_function_cat <- function(data = temp_dataset,
+                               possible_vals_cat = possible_vals,
+                               new_var = item)
+{
+
+  new_value <- ifelse(data[[new_var]] %in% possible_vals_cat, data[[new_var]], NA)
+
+  ## Recording the number of values set to missing in error log
+  orig_na <- sum(is.na(data[[new_var]]))
+  new_value_na <- sum(is.na(new_value))
+
+  ## Saving items into list, then return list
+  range_cat_result_list <- list(new_value = new_value,
+                                range_set_to_na = (new_value_na - orig_na))
+
+  return(range_cat_result_list)
+
+}
+
