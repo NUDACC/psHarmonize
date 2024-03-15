@@ -49,4 +49,18 @@ test_that('Testing range function', {
 
 
 
+# Testing categorical range function ---------
+
+test_data_cat <- data.frame(education = c('HS','None',NA,'CC','GS','Cert','HS','BS','MS','PhD',NA,'CC','Cert'))
+possible_vals <- c('None','GS','HS','BS','MS','PhD')
+
+expected_values_cat <- c('HS','None',NA,NA,'GS',NA,'HS','BS','MS','PhD',NA,NA,NA)
+
+expected_list <- list('new_value' = expected_values_cat, 'range_set_to_na' = 4)
+
+test_that('Testing categorical range function', {
+
+  expect_equal(range_function_cat(data = test_data_cat, possible_vals_cat = possible_vals, new_var = 'education'), expected_list)
+
+})
 
