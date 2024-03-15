@@ -1,5 +1,9 @@
 # psHarmonize 0.2.8
 
+* Added feature that allows user to define the set of possible categorical values. 
+* This is done by listing possible values in `possible_range` column in harmonization sheet.
+* A user could enter "a, b, c, d" in the `possible_range` column if they wanted any other harmonized values (other than "a, b, c, d") set to NA.
+
 # psHarmonize 0.2.7
 
 * Added additional RMarkdown files for comparison reports, when multiple input variables are used.
