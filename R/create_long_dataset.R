@@ -310,11 +310,21 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
     if (!is.na(possible_range) & possible_range != '')
     {
 
-      range_result <- range_function(temp_dataset, possible_range, item)
+      if (is.numeric(temp_dataset[[item]]))
+      {
 
-      temp_dataset[,item] <- range_result[['new_value']]
+        range_result <- range_function(temp_dataset, possible_range, item)
+        temp_dataset[,item] <- range_result[['new_value']]
+        error_log[error_log$item == subdomain,][current_row,c('range_set_to_na')] <- range_result[['range_set_to_na']]
 
-      error_log[error_log$item == subdomain,][current_row,c('range_set_to_na')] <- range_result[['range_set_to_na']]
+      } else if (is.character(temp_dataset[[item]]))
+      {
+
+        range_result <- range_function_cat(temp_dataset, possible_range, item)
+        temp_dataset[,item] <- range_result[['new_value']]
+        error_log[error_log$item == subdomain,][current_row,c('range_set_to_na')] <- range_result[['range_set_to_na']]
+
+      }
 
     }
 
