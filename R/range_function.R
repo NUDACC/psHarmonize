@@ -96,8 +96,9 @@ range_function_cat <- function(data = temp_dataset,
 {
 
   # Split string input to create vector
-  possible_vals_cat_vector <- stringr::str_split(string = possible_vals_cat, pattern = '[,\\s]+')
+  possible_vals_cat_vector <- stringr::str_split(string = possible_vals_cat, pattern = ',')
   possible_vals_cat_vector <- unlist(possible_vals_cat_vector)
+  possible_vals_cat_vector <- stringr::str_trim(string = possible_vals_cat_vector, side = 'both')
 
   new_value <- ifelse(data[[new_var]] %in% possible_vals_cat_vector, data[[new_var]], NA)
 
