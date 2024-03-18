@@ -66,6 +66,7 @@ test_that('Testing categorical range function', {
 
 # Trying with just one value -------
 
+test_data_cat <- data.frame(education = c('HS','None',NA,'CC','GS','Cert','HS','BS','MS','PhD',NA,'CC','Cert'))
 possible_vals <- c('HS')
 
 expected_values_cat <- c('HS',NA,NA,NA,NA,NA,'HS',NA,NA,NA,NA,NA,NA)
@@ -85,7 +86,7 @@ test_that('Testing categorical range function', {
 test_data_cat <- data.frame(education = c('High School','None',NA,'Community College','Grade School','Cert','High School','BS','MS','PhD',NA,'Community College','Cert'))
 possible_vals <- c('None , Grade School, High School , BS, MS, PhD')
 
-expected_values_cat <- c('HS','None',NA,NA,'GS',NA,'HS','BS','MS','PhD',NA,NA,NA)
+expected_values_cat <- c('High School','None',NA,NA,'Grade School',NA,'High School','BS','MS','PhD',NA,NA,NA)
 
 expected_list <- list('new_value' = expected_values_cat, 'range_set_to_na' = 4)
 
