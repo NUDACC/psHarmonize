@@ -1,5 +1,8 @@
 # psHarmonize 0.2.9
 
+* Fix bug in categorical `possible_range` function.
+* Added additional test for categorical `possible_range` function.
+
 # psHarmonize 0.2.8
 
 * Added feature that allows user to define the set of possible categorical values. 
