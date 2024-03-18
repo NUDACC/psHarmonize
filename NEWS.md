@@ -1,3 +1,5 @@
+# psHarmonize 0.2.9
+
 # psHarmonize 0.2.8
 
 * Added feature that allows user to define the set of possible categorical values. 
