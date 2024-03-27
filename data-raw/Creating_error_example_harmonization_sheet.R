@@ -226,6 +226,8 @@ harm_sheet_cohort_b <- bind_rows(harm_sheet_cohort_b, to_add)
 
 ## Height -----------
 
+# Using possible range as example
+
 to_add <- data.frame(
   id_var= 'ID',
   item = 'height',
@@ -238,7 +240,7 @@ to_add <- data.frame(
   code1 = 'x * 2.54',
   code_type = 'function',
   coding_notes = 'Convert from inches to cm',
-  possible_range = NA_character_
+  possible_range = '[150,180]'
 
 )
 
@@ -360,6 +362,7 @@ harm_sheet_cohort_c <- bind_rows(harm_sheet_cohort_c, to_add)
 
 ## Education ---------
 
+# Using possible range here for example
 
 to_add <- data.frame(
   id_var= 'cohort_id',
@@ -370,10 +373,10 @@ to_add <- data.frame(
   source_dataset = 'cohort_c',
   source_item = 'edu',
   visit = 1,
-  code1 = '1 = No education/grade school; 2 = High school; 3 = College; 4 = College',
+  code1 = '1 = Unknown; 2 = High school; 3 = College',
   code_type = 'recode category',
   coding_notes = 'Coding values to harmonized educational categories',
-  possible_range = NA_character_
+  possible_range = 'No education/grade school, High school, College'
 )
 
 
