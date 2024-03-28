@@ -1,3 +1,5 @@
+# psHarmonize 0.3.0
+
 # psHarmonize 0.2.9
 
 * Fix bug in categorical `possible_range` function.
