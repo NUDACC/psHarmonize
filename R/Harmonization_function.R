@@ -241,6 +241,12 @@ harmonization <- function(harmonization_sheet,
   # Create psHarmonize class
   class(return_list) <- c('psHarmonize', class(return_list))
 
+  # Print summary
+  cat('\n')
+  tryCatch(expr = {summary.psHarmonize(return_list)},
+           warning = function(w) {cat('Summary cannot be displayed\n')},
+           error = function(e) {cat('Summary cannot be displayed\n')})
+
   return(return_list)
 
 }
