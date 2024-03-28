@@ -4,10 +4,14 @@
 \alias{summary.psHarmonize}
 \title{psHarmonize summary method}
 \usage{
-\method{summary}{psHarmonize}(object, verbose = F)
+\method{summary}{psHarmonize}(object, ..., verbose = FALSE)
 }
 \arguments{
-\item{verbose}{}
+\item{object}{psHarmonize object}
+
+\item{...}{Can provide additional arguments}
+
+\item{verbose}{T/F. When TRUE, will list variables for each section.}
 }
 \description{
 psHarmonize summary method
