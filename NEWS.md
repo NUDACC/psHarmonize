@@ -1,5 +1,7 @@
 # psHarmonize 0.3.0
 
+* Added S3 summary method for psHarmonize return object object.
+
 # psHarmonize 0.2.9
 
 * Fix bug in categorical `possible_range` function.
