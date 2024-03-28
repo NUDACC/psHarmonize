@@ -27,9 +27,21 @@
 
 #' Harmonization sheet example
 #'
-#' Example of harmonization sheet. This serves as the input file for the harmonization function.
+#' Example of a harmonization sheet. This serves as the input file for the harmonization function.
 #'
 #' @format A data frame with 16 rows and 12 columns
 #'
 #' @source  Created data
 "harmonization_sheet_example"
+
+#' Error harmonization sheet example
+#'
+#' Example of harmonization sheet. This harmonization sheet has a few typos
+#' present (incorrect name of variable and/or dataset). This can be used to
+#' demonstrate how errors are presented in the error log and/or the summary
+#' method.
+#'
+#' @format A data frame with 16 rows and 12 columns
+#'
+#' @source  Created data
+"error_harmonization_sheet_example"
