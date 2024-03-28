@@ -1,13 +1,14 @@
 #' psHarmonize summary method
 #'
-#' @param object
-#' @param verbose
+#' @param object psHarmonize object
+#' @param ... Can provide additional arguments
+#' @param verbose T/F. When TRUE, will list variables for each section.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-summary.psHarmonize <- function(object, verbose = F)
+summary.psHarmonize <- function(object, ..., verbose = FALSE)
 {
 
   error_log <- object$error_log
@@ -45,7 +46,7 @@ summary.psHarmonize <- function(object, verbose = F)
   # will use as denominator
   num_total_possible_range_cat <- error_log %>%
     filter(!is.na(possible_range) & possible_range != '') %>%
-    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = T)) %>%
+    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
     summarise(n = n()) %>%
     pull(n)
 
@@ -53,16 +54,16 @@ summary.psHarmonize <- function(object, verbose = F)
   # will use as numerator
   num_na_possible_range_cat <- error_log %>%
     filter(!is.na(possible_range) & possible_range != '') %>%
-    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = T)) %>%
+    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
     filter(range_set_to_na > 0) %>%
     summarise(n = n()) %>%
     pull(n)
 
-  cat('# Harmonization status --------')
+  cat('# Harmonization status ----------------------------')
   cat('\n\n')
 
   cat('\n')
-  cat('## Successfully harmonized --------','\n')
+  cat('## Successfully harmonized ------------------------','\n')
   cat('\n')
 
   cat('Number of rows in harmonization sheet successfully harmonized: ', '\n', num_rows_completed, '/', num_total_rows, '\n')
@@ -86,7 +87,7 @@ summary.psHarmonize <- function(object, verbose = F)
   }
 
   cat('\n')
-  cat('## NOT successfully harmonized --------','\n')
+  cat('## NOT successfully harmonized --------------------','\n')
   cat('\n')
 
 
@@ -111,11 +112,11 @@ summary.psHarmonize <- function(object, verbose = F)
   }
 
   cat('\n')
-  cat('# Values outside of range --------')
+  cat('# Values outside of range -------------------------')
   cat('\n\n')
 
   cat('\n')
-  cat('## Numeric variables --------','\n')
+  cat('## Numeric variables ------------------------------','\n')
   cat('\n')
 
   cat('Number of numeric rows with values set to NA: ', '\n', num_na_possible_range_num, '/', num_total_possible_range_num, '\n')
@@ -141,7 +142,7 @@ summary.psHarmonize <- function(object, verbose = F)
   }
 
   cat('\n')
-  cat('## Categorical variables --------','\n')
+  cat('## Categorical variables --------------------------','\n')
   cat('\n')
 
   cat('Number of categorical rows with values set to NA: ', '\n', num_na_possible_range_cat, '/', num_total_possible_range_cat, '\n')
@@ -155,7 +156,7 @@ summary.psHarmonize <- function(object, verbose = F)
 
     out_of_range_cat <- error_log %>%
       filter(!is.na(possible_range) & possible_range != '') %>%
-      filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = T)) %>%
+      filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
       filter(range_set_to_na > 0)
 
     for(i in seq(1,nrow(out_of_range_cat)))
