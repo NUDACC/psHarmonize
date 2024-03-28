@@ -14,6 +14,6 @@ Created data
 harmonization_sheet_example
 }
 \description{
-Example of harmonization sheet. This serves as the input file for the harmonization function.
+Example of a harmonization sheet. This serves as the input file for the harmonization function.
 }
 \keyword{datasets}
