@@ -4,10 +4,15 @@
 #' @param instruction Coding instruction from harmonization sheet
 #' @param old_var Name of original variable
 #'
-#' @return
+#' @return Vector of length equal to `old_var`
 #' @export
 #'
 #' @examples
+#'
+#'# Allows the user to define a function with `instruction`
+#'# The `old_var` in `data` will be used in place of `x` in `instruction`.
+#'
+#'code_modify_func(data = cohort_a, instruction = 'x + 5', old_var = 'age')
 #'
 code_modify_func <- function(data = temp_dataset,
                              instruction = code_instruct,

@@ -17,6 +17,17 @@ code_modify_func(
 
 \item{old_var}{Name of original variable}
 }
+\value{
+Vector of length equal to \code{old_var}
+}
 \description{
 Code modify function. To be called by the harmonization function.
+}
+\examples{
+
+# Allows the user to define a function with `instruction`
+# The `old_var` in `data` will be used in place of `x` in `instruction`.
+
+code_modify_func(data = cohort_a, instruction = 'x + 5', old_var = 'age')
+
 }
