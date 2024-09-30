@@ -155,6 +155,17 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
 
     if(var_exists == FALSE) {next}
 
+    # Checking for id_var in dataset
+    if(!(id_var %in% names(temp_dataset)))
+    {
+      message(paste0('id_var: ', id_var, ' not found in dataset.'))
+
+      error_log[error_log$item == subdomain,][current_row,c('completed_status')] <- 'Not completed'
+      error_log[error_log$item == subdomain,][current_row,c('completed_reason')] <- 'id_var not found'
+
+      next
+    }
+
     temp_dataset <- temp_dataset[,c(id_var,source_item)]
 
 
