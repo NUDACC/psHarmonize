@@ -1,3 +1,5 @@
+# psHarmonize 0.3.1
+
 # psHarmonize 0.3.0
 
 * Added S3 summary method for psHarmonize return object object.
