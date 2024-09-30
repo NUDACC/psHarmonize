@@ -18,7 +18,7 @@ cohort_shell_func <- function(sheet)
     distinct(source_dataset, id_var, study, visit)
 
 
-  # Checking for dataset
+  # Checking for dataset and id_var
 
   for(i in unique(sheet[['source_dataset']]))
   {
@@ -28,12 +28,29 @@ cohort_shell_func <- function(sheet)
 
       sheet <- sheet %>%
         filter(!(source_dataset == i))
+      message(paste0('Dataset ', i, ' not found'))
+
+      next
+    }
+
+    for(j in unique(sheet[sheet$source_dataset == i,][['id_var']]))
+    {
+
+      if(!(j %in% names(get(i))))
+      {
+
+        sheet <- sheet %>%
+          filter(!(source_dataset == i & id_var == j))
+        message(paste0('id_var: ', j, ' in dataset: ', i, ' not found'))
+
+      }
 
     }
 
   }
 
-  ## Not sure I need to use a list actually...dataframe might work
+
+  # Using harmonization sheet as parameters in pmap
   input_list <- list(
     sheet[['source_dataset']],
     sheet[['id_var']],
@@ -66,7 +83,7 @@ cohort_shell_func <- function(sheet)
   cohort_shell <- bind_rows(cohort_shell_list) %>%
     distinct()
 
-  # Returting cohort shell
+  # Returning cohort shell
   return(cohort_shell)
 
 
