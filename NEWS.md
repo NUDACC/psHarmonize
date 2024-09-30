@@ -1,5 +1,14 @@
 # psHarmonize 0.3.1
 
+* Added code to recognize incorrectly entered `id_var` in harmonization sheet. The 
+cohort shell function will not use the corresponding dataset. Harmonization
+will skip this row in the harmonization sheet, and record reason in error log.
+
+* Added documentation for multiple R functions (mainly return values and examples).
+
+* Added NA values for `possible_range` when not specified in harmonization sheet. 
+Previously, an error occured when `possible_range` was absent.
+
 # psHarmonize 0.3.0
 
 * Added S3 summary method for psHarmonize return object object.

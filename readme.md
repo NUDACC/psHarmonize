@@ -1,7 +1,7 @@
 
 # psHarmonize
 
-(Ver. 0.3.0)
+(Ver. 0.3.1)
 
 **psHarmonize** is an R package that facilitates harmonization of data from multiple different datasets.
 
