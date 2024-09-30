@@ -38,6 +38,8 @@ function will not be able to detect it.
 # harmonized_obj <- harmonization(harmonization_sheet = error_harmonization_sheet_example)
 
 # Knitting error log report
-# create_error_log_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html)
+# create_error_log_report(harmonization_object = harmonized_obj,
+#   path = './',
+#   file = 'example_output.html)
 
 }

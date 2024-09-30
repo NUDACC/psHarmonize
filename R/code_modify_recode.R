@@ -13,7 +13,8 @@
 #'
 #'test_data <- data.frame(val = c('a','b','c','d'))
 #'
-#'code_modify_recode(data = test_data, instruction = 'a = apple; c = carrot', old_var = 'val', new_var = 'new')
+#' code_modify_recode(data = test_data,
+#'   instruction = 'a = apple; c = carrot', old_var = 'val', new_var = 'new')
 #'
 code_modify_recode <- function(data = temp_dataset,
                                instruction = code_instruct,

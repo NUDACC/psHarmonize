@@ -34,10 +34,15 @@ Summary report creation
 # harmonized_obj <- harmonization(harmonization_sheet = harmonization_sheet_example)
 
 # Knitting summary report
-# create_summary_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html)
+# create_summary_report(harmonization_object = harmonized_obj,
+#   path = './',
+#   file = 'example_output.html)
 
 # Use `compare` option to create comparison summary report.
-# create_summary_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html, compare = TRUE)
+# create_summary_report(harmonization_object = harmonized_obj,
+#   path = './',
+#   file = 'example_output.html,
+#   compare = TRUE)
 
 
 }
