@@ -9,6 +9,16 @@ cohort_shell_func(sheet)
 \arguments{
 \item{sheet}{Harmonization sheet}
 }
+\value{
+Data.frame with IDs, study/cohort name, and visit.
+}
 \description{
-Cohort sheet create. To be called by harmonization function.
+Created dataframe "shell" of IDs, study/cohort name, and visit. Harmonized
+variables will be joined onto this dataset.
+}
+\examples{
+
+# Using example harmonization sheet
+cohort_shell_func(harmonization_sheet_example)
+
 }

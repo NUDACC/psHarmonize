@@ -17,6 +17,16 @@ range_function(
 
 \item{new_var}{New variable}
 }
+\value{
+Returns a list with the new vector (values outside of range set to NA), and the number of values set to NA.
+}
 \description{
 Range function. To be called by harmonization function.
+}
+\examples{
+
+test_data <- data.frame(val = 1:10)
+
+range_function(data = test_data, min_max_range = '[2,8]', new_var = 'val')
+
 }

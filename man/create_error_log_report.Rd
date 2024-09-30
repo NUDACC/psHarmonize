@@ -17,6 +17,9 @@ create_error_log_report(
 
 \item{file}{Filename of output R Markdown report}
 }
+\value{
+Does not return an object, but instead knits html RMarkdown report to specified path and file name.
+}
 \description{
 This function will create an RMarkdown error log. It takes the harmonization
 object as the input, and will knit an RMarkdown html file to the path
@@ -26,4 +29,15 @@ specified.
 not "content" errors. For example, if the user enters coding instructions
 that are nonsensical or incorrect, but are still able to be executed, this
 function will not be able to detect it.
+}
+\examples{
+
+# Examples not run
+
+# Creating harmonized object using harmonization sheet with errors.
+# harmonized_obj <- harmonization(harmonization_sheet = error_harmonization_sheet_example)
+
+# Knitting error log report
+# create_error_log_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html)
+
 }

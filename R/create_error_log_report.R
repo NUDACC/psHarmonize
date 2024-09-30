@@ -14,10 +14,18 @@
 #' @param path Path of output R Markdown report
 #' @param file Filename of output R Markdown report
 #'
-#' @return
+#' @return Does not return an object, but instead knits html RMarkdown report to specified path and file name.
 #' @export
 #'
 #' @examples
+#'
+#' # Examples not run
+#'
+#' # Creating harmonized object using harmonization sheet with errors.
+#' # harmonized_obj <- harmonization(harmonization_sheet = error_harmonization_sheet_example)
+#'
+#' # Knitting error log report
+#' # create_error_log_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html)
 #'
 create_error_log_report <- function(harmonization_object, path = './', file = 'error_log_report.html')
 {

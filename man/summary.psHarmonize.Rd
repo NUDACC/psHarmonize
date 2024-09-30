@@ -13,6 +13,19 @@
 
 \item{verbose}{T/F. When TRUE, will list variables for each section.}
 }
+\value{
+Doesn't return object. Prints status of harmonization (# of harmonizated variables, etc.)
+}
 \description{
 psHarmonize summary method
+}
+\examples{
+
+harmonization_obj <- harmonization(harmonization_sheet_example)
+
+summary(harmonization_obj)
+
+# Use verbose option to see more details
+summary(harmonization_obj, verbose = TRUE)
+
 }

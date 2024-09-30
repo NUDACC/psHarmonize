@@ -4,10 +4,18 @@
 #' @param ... Can provide additional arguments
 #' @param verbose T/F. When TRUE, will list variables for each section.
 #'
-#' @return
+#' @return Doesn't return object. Prints status of harmonization (# of harmonizated variables, etc.)
 #' @export
 #'
 #' @examples
+#'
+#' harmonization_obj <- harmonization(harmonization_sheet_example)
+#'
+#' summary(harmonization_obj)
+#'
+#' # Use verbose option to see more details
+#' summary(harmonization_obj, verbose = TRUE)
+#'
 summary.psHarmonize <- function(object, ..., verbose = FALSE)
 {
 

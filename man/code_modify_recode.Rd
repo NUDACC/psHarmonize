@@ -2,7 +2,7 @@
 % Please edit documentation in R/code_modify_recode.R
 \name{code_modify_recode}
 \alias{code_modify_recode}
-\title{Code modify recode.}
+\title{Code modify recode. To be called by harmonization function.}
 \usage{
 code_modify_recode(
   data = temp_dataset,
@@ -23,6 +23,16 @@ code_modify_recode(
 
 \item{na_string}{Character string of final recode value to be set to NA.}
 }
+\value{
+Returns vector of new variable after recoding as needed.
+}
 \description{
-Code modify recode.
+Code modify recode. To be called by harmonization function.
+}
+\examples{
+
+test_data <- data.frame(val = c('a','b','c','d'))
+
+code_modify_recode(data = test_data, instruction = 'a = apple; c = carrot', old_var = 'val', new_var = 'new')
+
 }

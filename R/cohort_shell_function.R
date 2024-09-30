@@ -1,13 +1,19 @@
 #' Cohort sheet create. To be called by harmonization function.
 #'
+#' Created dataframe "shell" of IDs, study/cohort name, and visit. Harmonized
+#' variables will be joined onto this dataset.
+#'
 #' @param sheet Harmonization sheet
 #'
 #' @importFrom dplyr distinct bind_rows mutate
 #'
-#' @return
+#' @return Data.frame with IDs, study/cohort name, and visit.
 #' @export
 #'
 #' @examples
+#'
+#' # Using example harmonization sheet
+#' cohort_shell_func(harmonization_sheet_example)
 #'
 cohort_shell_func <- function(sheet)
 {

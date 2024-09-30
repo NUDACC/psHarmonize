@@ -20,6 +20,24 @@ create_summary_report(
 
 \item{compare}{Creates summary report with comparison of raw values with modified values}
 }
+\value{
+Does not return an object, but instead knits html RMarkdown report to specified path and file name.
+}
 \description{
 Summary report creation
+}
+\examples{
+
+# Examples not run
+
+# Creating harmonized object
+# harmonized_obj <- harmonization(harmonization_sheet = harmonization_sheet_example)
+
+# Knitting summary report
+# create_summary_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html)
+
+# Use `compare` option to create comparison summary report.
+# create_summary_report(harmonization_object = harmonized_obj, path = './', file = 'example_output.html, compare = TRUE)
+
+
 }

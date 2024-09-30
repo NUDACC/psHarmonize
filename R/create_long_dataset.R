@@ -9,7 +9,7 @@
 #' @importFrom dplyr rename mutate starts_with bind_rows
 #' @importFrom rlang :=
 #'
-#' @return
+#' @return Returns a list with the harmonized long dataset, and error log.
 #' @export
 #'
 #' @examples

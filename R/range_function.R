@@ -4,12 +4,16 @@
 #' @param min_max_range Range of allowed values
 #' @param new_var New variable
 #'
-#' @return
+#' @return Returns a list with the new vector (values outside of range set to NA), and the number of values set to NA.
 #' @export
 #'
 #' @importFrom dplyr case_when
 #'
 #' @examples
+#'
+#' test_data <- data.frame(val = 1:10)
+#'
+#' range_function(data = test_data, min_max_range = '[2,8]', new_var = 'val')
 #'
 range_function <- function(data = temp_dataset,
                            min_max_range = possible_range,
@@ -85,10 +89,14 @@ range_function <- function(data = temp_dataset,
 #' @param possible_vals_cat vector of possible values
 #' @param new_var new variable
 #'
-#' @return
+#' @return Returns a list with the new vector (values outside of set to NA), and the number of values set to NA.
 #' @export
 #'
 #' @examples
+#'
+#' test_data <- data.frame(val = c('a','b','j','k','c','d'))
+#'
+#' range_function_cat(data = test_data, possible_vals_cat = c('a','b','c','d'), new_var = 'val')
 #'
 range_function_cat <- function(data = temp_dataset,
                                possible_vals_cat = possible_vals,

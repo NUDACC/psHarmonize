@@ -23,6 +23,9 @@ create_long_dataset(
 
 \item{na_string}{Character string of final recode value to be set to NA.}
 }
+\value{
+Returns a list with the harmonized long dataset, and error log.
+}
 \description{
 Create long dataset. To be called by harmonization function.
 }

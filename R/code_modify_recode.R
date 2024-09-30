@@ -1,4 +1,4 @@
-#' Code modify recode.
+#' Code modify recode. To be called by harmonization function.
 #'
 #' @param data Dataframe to be modified
 #' @param instruction Coding instruction from harmonization sheet
@@ -6,10 +6,14 @@
 #' @param new_var Name of new variable
 #' @param na_string Character string of final recode value to be set to NA.
 #'
-#' @return
+#' @return Returns vector of new variable after recoding as needed.
 #' @export
 #'
 #' @examples
+#'
+#'test_data <- data.frame(val = c('a','b','c','d'))
+#'
+#'code_modify_recode(data = test_data, instruction = 'a = apple; c = carrot', old_var = 'val', new_var = 'new')
 #'
 code_modify_recode <- function(data = temp_dataset,
                                instruction = code_instruct,

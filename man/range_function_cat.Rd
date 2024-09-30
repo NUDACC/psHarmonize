@@ -17,6 +17,16 @@ range_function_cat(
 
 \item{new_var}{new variable}
 }
+\value{
+Returns a list with the new vector (values outside of set to NA), and the number of values set to NA.
+}
 \description{
 Possible values for categorical variables. To be called by harmonization function.
+}
+\examples{
+
+test_data <- data.frame(val = c('a','b','j','k','c','d'))
+
+range_function_cat(data = test_data, possible_vals_cat = c('a','b','c','d'), new_var = 'val')
+
 }

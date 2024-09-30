@@ -9,10 +9,21 @@
 #' @param visit Visit number
 #' @param cohort Cohort name
 #'
-#' @return
+#' @return Vector of length equal to `old_var`
 #' @export
 #'
 #' @examples
+#'
+#' # Example calculating BMI in cohort a for visit 1
+#'
+#' code_modify_func_multi(data = cohort_a,
+#'                      instruction = '(x1 / 2.205)/((x2 / 39.37)**2)',
+#'                      old_var = 'weight_1; height_1',
+#'                      user_args = c('weight_1','height_1'),
+#'                      sourcedataset = 'cohort_a',
+#'                      subdomain = 'clinical',
+#'                      visit = 1,
+#'                      cohort = 'cohort_a')
 #'
 code_modify_func_multi <- function(data = temp_dataset,
                                    instruction = code_instruct,
