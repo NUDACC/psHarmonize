@@ -96,6 +96,17 @@ harmonization <- function(harmonization_sheet,
   }
 
 
+  # If some columns don't exist, add in assumed values
+
+  ## possible_range
+
+  if(!('possible_range' %in% names(harmonization_sheet)))
+  {
+    message('No "possible_range" column present. Assuming NA for "possible_range".')
+    harmonization_sheet$possible_range <- NA
+  }
+
+
   # Creating "shell". This is a long dataset to merge on other elements
   # Visits that are not NA
   combined_long_dataset <- cohort_shell_func(sheet = harmonization_sheet[!is.na(harmonization_sheet$visit),])
