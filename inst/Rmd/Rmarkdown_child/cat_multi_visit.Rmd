@@ -52,7 +52,7 @@ table_output %>%
   data_intermediate %>%
     group_by(visit, value) %>%
     count() %>%
-    ggplot(aes(y = n, x = factor(visit), fill = value)) + 
+    ggplot(aes(y = n, x = factor(visit), fill = factor(value))) + 
     geom_bar(stat = 'identity', position = 'fill') +
     theme_bw() +
     labs(
@@ -70,7 +70,7 @@ table_output %>%
   data_intermediate %>%
     group_by(visit, value) %>%
     count() %>%
-    ggplot(aes(y = n, x = factor(visit), fill = value)) + 
+    ggplot(aes(y = n, x = factor(visit), fill = factor(value))) + 
     geom_bar(stat = 'identity', position = 'fill') +
     theme_bw() +
     labs(
