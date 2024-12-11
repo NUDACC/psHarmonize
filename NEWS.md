@@ -1,5 +1,7 @@
 # psHarmonize 0.3.2
 
+* Fixed issue that prevented some numeric harmonized values from plotting.
+
 # psHarmonize 0.3.1
 
 * Added code to recognize incorrectly entered `id_var` in harmonization sheet. The 
