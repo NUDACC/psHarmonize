@@ -1,5 +1,6 @@
 
 # psHarmonize
+<hr>
 
 (Ver. 0.3.1)
 
@@ -11,7 +12,18 @@ This sheet catalogs variable names, domains (e.g. clinical, behavioral, outcomes
 The R package allows the user to extract the harmonized data in the long and wide format.
 The package also provides functions for report generation using the harmonized data.
 
+
+## Installation
+<hr>
+
+The **psHarmonize** package can be installed from GitHub with the following command:
+
+``` r
+remotes::install_github("NUDACC/psHarmonize")
+```
+
 ## Data modification
+<hr>
 
 Data modification can include:
 
@@ -19,6 +31,7 @@ Data modification can include:
 - Mapping of categorical variables within individual data sets to a common set of study-wide values
 
 ## Report generation
+<hr>
 
 The package can create a few types of reports.
 
