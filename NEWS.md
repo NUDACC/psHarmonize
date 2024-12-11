@@ -1,3 +1,5 @@
+# psHarmonize 0.3.2
+
 # psHarmonize 0.3.1
 
 * Added code to recognize incorrectly entered `id_var` in harmonization sheet. The 
