@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_long_dataset.R
 \name{create_long_dataset}
 \alias{create_long_dataset}
-\title{Create long dataset. To be called by harmonization function.}
+\title{Create long dataset.}
 \usage{
 create_long_dataset(
   vars_interest,
@@ -27,5 +27,33 @@ create_long_dataset(
 Returns a list with the harmonized long dataset, and error log.
 }
 \description{
-Create long dataset. To be called by harmonization function.
+This function is usually not called by the user. Instead it is usually
+called by \code{\link[=harmonization]{harmonization()}} function.
+}
+\details{
+The function takes the harmonization sheet, and input dataframe, and creates
+a dataframe with the harmonized variable.
+}
+\examples{
+
+# Example sheet
+test_sheet <- harmonization_sheet_example[harmonization_sheet_example$study == 'Cohort A',]
+
+# Example dataset
+test_data <- cohort_a
+
+# create error log
+test_error_log <- test_sheet[,c('item','study','visit','possible_range')]
+
+test_error_log$completed_status <- NA_character_
+test_error_log$completed_reason <- NA_character_
+test_error_log$range_set_to_na <- NA_integer_
+test_error_log$range_out_of_range_warning <- NA
+
+long_dataset <- create_long_dataset(vars_interest = test_sheet,
+                                    subdomain = 'age',
+                                    previous_dataset = test_data,
+                                    error_log = test_error_log,
+                                    na_string = 'NA')
+
 }
