@@ -1,4 +1,10 @@
-#' Create long dataset. To be called by harmonization function.
+#' Create long dataset.
+#'
+#' This function is usually not called by the user. Instead it is usually
+#' called by [harmonization()] function.
+#'
+#' The function takes the harmonization sheet, and input dataframe, and creates
+#' a dataframe with the harmonized variable.
 #'
 #' @param vars_interest Variable currently being harmonized
 #' @param subdomain Category of variable
@@ -13,6 +19,26 @@
 #' @export
 #'
 #' @examples
+#'
+#' # Example sheet
+#' test_sheet <- harmonization_sheet_example[harmonization_sheet_example$study == 'Cohort A',]
+#'
+#' # Example dataset
+#' test_data <- cohort_a
+#'
+#' # create error log
+#' test_error_log <- test_sheet[,c('item','study','visit','possible_range')]
+#'
+#' test_error_log$completed_status <- NA_character_
+#' test_error_log$completed_reason <- NA_character_
+#' test_error_log$range_set_to_na <- NA_integer_
+#' test_error_log$range_out_of_range_warning <- NA
+#'
+#' long_dataset <- create_long_dataset(vars_interest = test_sheet,
+#'                                     subdomain = 'age',
+#'                                     previous_dataset = test_data,
+#'                                     error_log = test_error_log,
+#'                                     na_string = 'NA')
 #'
 create_long_dataset <- function(vars_interest, subdomain, previous_dataset, error_log, na_string)
 {
