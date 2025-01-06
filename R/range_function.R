@@ -20,6 +20,10 @@ range_function <- function(data = temp_dataset,
                            new_var = item)
 {
 
+  temp_dataset <- NULL
+  possible_range <- NULL
+  item <- NULL
+
   ## Get numbers
   min_num <- stringr::str_extract(min_max_range, '[:digit:]+(?=,)') %>%
     as.numeric()
@@ -102,6 +106,11 @@ range_function_cat <- function(data = temp_dataset,
                                possible_vals_cat = possible_vals,
                                new_var = item)
 {
+
+  temp_dataset <- NULL
+  possible_range <- NULL
+  item <- NULL
+  possible_vals <- NULL
 
   # Split string input to create vector
   possible_vals_cat_vector <- stringr::str_split(string = possible_vals_cat, pattern = ',')

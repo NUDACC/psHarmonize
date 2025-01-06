@@ -4,3 +4,6 @@
 ^LICENSE\.md$
 ^Creating_example_data\.R$
 ^Creating_example_harmonization_sheet\.R$
+^readme.md$
+^data-raw$
+^README\.Rmd$

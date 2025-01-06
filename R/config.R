@@ -1,3 +1,5 @@
+#' @importFrom RColorBrewer brewer.pal
+
 # Longer color palette ---------------------------------------------------------
 
 ## There are a few cases where the palette in Rcolorbrewer is running out of colors

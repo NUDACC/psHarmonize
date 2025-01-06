@@ -10,6 +10,7 @@
 #' @param cohort Cohort name
 #'
 #' @return Vector of length equal to `old_var`
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -34,6 +35,12 @@ code_modify_func_multi <- function(data = temp_dataset,
                                    visit = visit,
                                    cohort = cohort)
 {
+  temp_dataset <- NULL
+  code_instruct <- NULL
+  source_item_long <- NULL
+  source_item <- NULL
+  source_dataset <- NULL
+
   ## Create empty function
   mod_function <- function(...){}
 
@@ -46,7 +53,7 @@ code_modify_func_multi <- function(data = temp_dataset,
   if(sourcedataset == 'previous_dataset')
   {
     intermediate <- data %>%
-      filter(visit == visit & cohort == cohort)
+      filter(.data$visit == visit & .data$cohort == cohort)
 
 
     # Renaming user args if previous dataset

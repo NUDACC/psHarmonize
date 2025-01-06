@@ -5,6 +5,7 @@
 #' @param verbose T/F. When TRUE, will list variables for each section.
 #'
 #' @return Doesn't return object. Prints status of harmonization (# of harmonizated variables, etc.)
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -19,6 +20,10 @@
 summary.psHarmonize <- function(object, ..., verbose = FALSE)
 {
 
+  possible_range <- NULL
+  range_set_to_na <- NULL
+  completed_status <- NULL
+
   error_log <- object$error_log
 
   num_total_rows <- nrow(error_log)
@@ -32,19 +37,19 @@ summary.psHarmonize <- function(object, ..., verbose = FALSE)
   # total rows with non missing possible range
   # will use as denominator
   num_total_possible_range_num <- error_log %>%
-    filter(!is.na(possible_range) & possible_range != '') %>%
-    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]')) %>%
+    filter(!is.na(.data$possible_range) & .data$possible_range != '') %>%
+    filter(stringr::str_detect(string = .data$possible_range, pattern = '[\\[\\(\\]\\)]')) %>%
     summarise(n = n()) %>%
-    pull(n)
+    pull(.data$n)
 
   # rows with non missing possible range, with > 0 values set to NA
   # will use as numerator
   num_na_possible_range_num <- error_log %>%
-    filter(!is.na(possible_range) & possible_range != '') %>%
-    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]')) %>%
-    filter(range_set_to_na > 0) %>%
+    filter(!is.na(.data$possible_range) & .data$possible_range != '') %>%
+    filter(stringr::str_detect(string = .data$possible_range, pattern = '[\\[\\(\\]\\)]')) %>%
+    filter(.data$range_set_to_na > 0) %>%
     summarise(n = n()) %>%
-    pull(n)
+    pull(.data$n)
 
 
   # Possible range rows, for categorical
@@ -53,19 +58,19 @@ summary.psHarmonize <- function(object, ..., verbose = FALSE)
   # total rows with non missing possible range
   # will use as denominator
   num_total_possible_range_cat <- error_log %>%
-    filter(!is.na(possible_range) & possible_range != '') %>%
-    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
+    filter(!is.na(.data$possible_range) & .data$possible_range != '') %>%
+    filter(stringr::str_detect(string = .data$possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
     summarise(n = n()) %>%
-    pull(n)
+    pull(.data$n)
 
   # rows with non missing possible range, with > 0 values set to NA
   # will use as numerator
   num_na_possible_range_cat <- error_log %>%
-    filter(!is.na(possible_range) & possible_range != '') %>%
-    filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
-    filter(range_set_to_na > 0) %>%
+    filter(!is.na(.data$possible_range) & .data$possible_range != '') %>%
+    filter(stringr::str_detect(string = .data$possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
+    filter(.data$range_set_to_na > 0) %>%
     summarise(n = n()) %>%
-    pull(n)
+    pull(.data$n)
 
   cat('# Harmonization status ----------------------------')
   cat('\n\n')
@@ -84,7 +89,7 @@ summary.psHarmonize <- function(object, ..., verbose = FALSE)
     cat('\n')
 
     harmonized_success <- error_log %>%
-      filter(completed_status == 'Completed')
+      filter(.data$completed_status == 'Completed')
 
     for(i in seq(1,nrow(harmonized_success)))
     {
@@ -109,7 +114,7 @@ summary.psHarmonize <- function(object, ..., verbose = FALSE)
     cat('\n')
 
     harmonized_not_success <- error_log %>%
-      filter(completed_status == 'Not completed')
+      filter(.data$completed_status == 'Not completed')
 
     for(i in seq(1,nrow(harmonized_not_success)))
     {
@@ -137,9 +142,9 @@ summary.psHarmonize <- function(object, ..., verbose = FALSE)
     cat('\n')
 
     out_of_range_num <- error_log %>%
-      filter(!is.na(possible_range) & possible_range != '') %>%
-      filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]')) %>%
-      filter(range_set_to_na > 0)
+      filter(!is.na(.data$possible_range) & .data$possible_range != '') %>%
+      filter(stringr::str_detect(string = .data$possible_range, pattern = '[\\[\\(\\]\\)]')) %>%
+      filter(.data$range_set_to_na > 0)
 
     for(i in seq(1,nrow(out_of_range_num)))
     {
@@ -163,9 +168,9 @@ summary.psHarmonize <- function(object, ..., verbose = FALSE)
     cat('\n')
 
     out_of_range_cat <- error_log %>%
-      filter(!is.na(possible_range) & possible_range != '') %>%
-      filter(stringr::str_detect(string = possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
-      filter(range_set_to_na > 0)
+      filter(!is.na(.data$possible_range) & .data$possible_range != '') %>%
+      filter(stringr::str_detect(string = .data$possible_range, pattern = '[\\[\\(\\]\\)]', negate = TRUE)) %>%
+      filter(.data$range_set_to_na > 0)
 
     for(i in seq(1,nrow(out_of_range_cat)))
     {

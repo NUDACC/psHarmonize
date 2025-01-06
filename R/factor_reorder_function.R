@@ -4,54 +4,56 @@
 #' @param sheet Factor reorder sheet.
 #'
 #' @return Returns harmonization object, or harmonized data.frame.
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
 #'
-#'# Running harmonization function with example harmonization sheet
-#'harmonization_obj <- harmonization(harmonization_sheet = harmonization_sheet_example)
+#' # Running harmonization function with example harmonization sheet
+#' harmonization_obj <- harmonization(harmonization_sheet = harmonization_sheet_example)
 #'
-#'long_dataset <- harmonization_obj$long_dataset
+#' long_dataset <- harmonization_obj$long_dataset
 #'
-#'table(long_dataset$education)
+#' table(long_dataset$education)
 #'
-#'# College
-#'# 5643
-#'#
-#'# Graduate/Professional
-#'# 1287
-#'#
-#'# High school
-#'# 7562
-#'#
-#'# No education/grade school
-#'# 7508
+#' # College
+#' # 5643
+#' #
+#' # Graduate/Professional
+#' # 1287
+#' #
+#' # High school
+#' # 7562
+#' #
+#' # No education/grade school
+#' # 7508
 #'
-#'# Creating factor reorder sheet
-#'edu_order <- data.frame(
+#' # Creating factor reorder sheet
+#' edu_order <- data.frame(
 #'  variable = 'education',
 #'  values = c('No education/grade school', 'High school', 'College', 'Graduate/Professional'),
 #'  order = 1:4
-#')
+#' )
 #'
-#'# Reorder factors
-#'harmonization_obj <- reorder_factors(data = harmonization_obj, sheet = edu_order)
+#' # Reorder factors
+#' harmonization_obj <- reorder_factors(data = harmonization_obj, sheet = edu_order)
 #'
-#'long_dataset <- harmonization_obj$long_dataset
+#' long_dataset <- harmonization_obj$long_dataset
 #'
-#'table(long_dataset$education)
+#' table(long_dataset$education)
 #'
-#'# No education/grade school
-#'# 7508
-#'#
-#'# High school
-#'# 7562
-#'#
-#'# College
-#'# 5643
-#'#
-#'# Graduate/Professional
-#'# 1287
+#' # No education/grade school
+#' # 7508
+#' #
+#' # High school
+#' # 7562
+#' #
+#' # College
+#' # 5643
+#' #
+#' # Graduate/Professional
+#' # 1287
+#'
 #'
 reorder_factors <- function(data, sheet)
 {
@@ -139,8 +141,45 @@ reorder_factors <- function(data, sheet)
 #'
 #' @examples
 #'
+#' # Creating example dataframe of variables, the order, and the values
+#' # The function will reorder the factor using these values in the order
+#' # provided.
+#'
+#' # This would typically be created in an excel or CSV file outside of R,
+#' # and then imported into R.
+#' test_sheet <- data.frame(
+#'   variable = c(rep('Education',4),rep('Class',3)),
+#'   order = c(1,2,3,4,1,2,3),
+#'   values = c('None','Grade','HS','College','A','B','C')
+#' )
+#'
+#' # I'm creating some test data to demonstrate
+#' set.seed(1234)
+#' test_data <- data.frame(
+#'   ID = 1:20,
+#'   Education = sample(c('None','Grade','HS','College'), size = 20, replace = TRUE),
+#'   Class = sample(c('A','B','C'), size = 20, replace = TRUE)
+#' )
+#'
+#' # Creating factors in the test data
+#' test_data$Education <- factor(test_data$Education)
+#' test_data$Class <- factor(test_data$Class)
+#'
+#' table(test_data$Education, useNA = 'ifany')
+#' table(test_data$Class, useNA = 'ifany')
+#'
+#'
+#' # Now reordering factors based on the sheet
+#' test_data_mod <- reorder_factors_df(data = test_data, sheet = test_sheet)
+#'
+#' table(test_data_mod$Education, useNA = 'ifany')
+#' table(test_data_mod$Class, useNA = 'ifany')
+#'
 reorder_factors_df <- function(data, sheet)
 {
+
+  variable <- NULL
+  values <- NULL
 
   for (current_var in unique(sheet$variable))
   {
@@ -175,9 +214,9 @@ reorder_factors_df <- function(data, sheet)
 
     ## Get values in order
     factor_order <- sheet %>%
-      filter(variable == current_var) %>%
-      arrange(order) %>%
-      pull(values)
+      filter(.data$variable == current_var) %>%
+      arrange(.data$order) %>%
+      pull(.data$values)
 
 
     ## Reorder factor

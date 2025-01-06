@@ -18,6 +18,9 @@ code_modify_func <- function(data = temp_dataset,
                              instruction = code_instruct,
                              old_var = source_item_long)
 {
+  temp_dataset <- NULL
+  code_instruct <- NULL
+  source_item_long <- NULL
 
   ## Create function
   mod_function <- function(x){}

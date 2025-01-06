@@ -6,6 +6,7 @@
 #' @param sheet Harmonization sheet
 #'
 #' @importFrom dplyr distinct bind_rows mutate
+#' @importFrom rlang .data
 #'
 #' @return Data.frame with IDs, study/cohort name, and visit.
 #' @export
@@ -18,10 +19,16 @@
 cohort_shell_func <- function(sheet)
 {
 
+  source_dataset <- NULL
+  id_var <- NULL
+  study <- NULL
+  visit <- NULL
+  ID <- NULL
+
   # Call function with data from harmonization sheet
   sheet <- sheet %>%
-    filter(!(source_dataset == 'previous_dataset')) %>%
-    distinct(source_dataset, id_var, study, visit)
+    filter(!(.data$source_dataset == 'previous_dataset')) %>%
+    distinct(.data$source_dataset, .data$id_var, .data$study, .data$visit)
 
 
   # Checking for dataset and id_var
@@ -33,7 +40,7 @@ cohort_shell_func <- function(sheet)
     {
 
       sheet <- sheet %>%
-        filter(!(source_dataset == i))
+        filter(!(.data$source_dataset == i))
       message(paste0('Dataset ', i, ' not found'))
 
       next
@@ -46,7 +53,7 @@ cohort_shell_func <- function(sheet)
       {
 
         sheet <- sheet %>%
-          filter(!(source_dataset == i & id_var == j))
+          filter(!(.data$source_dataset == i & .data$id_var == j))
         message(paste0('id_var: ', j, ' in dataset: ', i, ' not found'))
 
       }

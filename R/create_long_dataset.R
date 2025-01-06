@@ -13,7 +13,7 @@
 #' @param na_string Character string of final recode value to be set to NA.
 #'
 #' @importFrom dplyr rename mutate starts_with bind_rows
-#' @importFrom rlang :=
+#' @importFrom rlang := .data
 #'
 #' @return Returns a list with the harmonized long dataset, and error log.
 #' @export
@@ -42,6 +42,9 @@
 #'
 create_long_dataset <- function(vars_interest, subdomain, previous_dataset, error_log, na_string)
 {
+
+  visit <- NULL
+  ID <- NULL
 
   vars_interest <- vars_interest[vars_interest$item == subdomain,]
 
@@ -113,22 +116,6 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
 
     ## Error handling
 
-    # error_dataset <- FALSE
-    #
-    # tryCatch(
-    #  expr =
-    #    {
-    #      temp_dataset <- get(source_dataset)
-    #    },
-    #  error = function(e)
-    #  {
-    #    error_dataset <<- TRUE
-    #  }
-    # )
-    #
-    # ## See if dataset exists
-    # if(error_dataset == TRUE) { next }
-
 
     if(exists(source_dataset) == FALSE)
     {
@@ -145,7 +132,7 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
       curr_cohort <- cohort
 
       temp_dataset <- previous_dataset %>%
-        filter(visit == vars_interest[current_row,][['visit']] & cohort == curr_cohort)
+        filter(.data$visit == vars_interest[current_row,][['visit']] & .data$cohort == curr_cohort)
 
 
     } else
@@ -194,56 +181,9 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
 
     temp_dataset <- temp_dataset[,c(id_var,source_item)]
 
-
-    # if(!(source_item %in% names(temp_dataset)))
-    # {
-    #
-    #   print('Variable not found')
-    #
-    #   # error_log[error_log$subdomain == subdomain,][current_row,c('completed_status')] <- 'Not completed'
-    #   # error_log[error_log$subdomain == subdomain,][current_row,c('completed_reason')] <- 'Variable not found'
-    #
-    #   error_log[current_row,c('completed_status')] <- 'Not completed'
-    #   error_log[current_row,c('completed_reason')] <- 'Variable not found'
-    #
-    #   next
-    # } else
-    # {
-    #
-    #   temp_dataset <- temp_dataset[,c(id_vars[[cohort]],source_item)]
-    #
-    # }
-
-    #print(head(temp_dataset))
-
-
     ## Rename variable of interest
     temp_dataset <- temp_dataset %>%
       rename({{source_item_long}} := {{source_item}})
-
-
-
-    # if (length(source_item) == 1)
-    # {
-    #   temp_dataset <- temp_dataset %>%
-    #     rename({{source_item_long}} := {{source_item}})
-    # }
-    # else if (length(source_item) > 1)
-    # {
-    #
-    #   for (current_row in 1:length(source_item))
-    #   {
-    #
-    #     new_var_name <- paste0(source_item_long, "_", i)
-    #
-    #     old_var_name <- source_item[[i]]
-    #
-    #     temp_dataset <- temp_dataset %>%
-    #       rename({{new_var_name}} := {{old_var_name}})
-    #
-    #   }
-    #
-    # }
 
 
     ## Assign visit column
@@ -284,13 +224,6 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
 
       # Recode source items to character, if new item is character
 
-
-      # if(is.character(temp_dataset[[item]]) && is.character(temp_dataset[[source_item_long]]) == FALSE)
-      # {
-      #
-      #   temp_dataset[[source_item_long]] <- as.character(temp_dataset[[source_item_long]])
-      #
-      # }
 
     }
 

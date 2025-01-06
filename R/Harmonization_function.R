@@ -25,6 +25,7 @@
 #'
 #' @importFrom dplyr select filter group_by summarise pull n ungroup count
 #'   starts_with all_of left_join relocate distinct
+#' @importFrom rlang .data
 #'
 #' @examples
 #'
@@ -46,6 +47,17 @@ harmonization <- function(harmonization_sheet,
                           source_variables = TRUE,
                           na_string = 'NA')
 {
+
+  study <- NULL
+  item <- NULL
+  visit <- NULL
+  n_rows <- NULL
+  max_rows <- NULL
+  code1 <- NULL
+  code_type <- NULL
+  cohort <- NULL
+  ID <- NULL
+  possible_range <- NULL
 
   # Warning prompt
   if(interactive())
@@ -69,7 +81,7 @@ harmonization <- function(harmonization_sheet,
   ## Item
 
   max_row_per_group <- harmonization_sheet %>%
-    group_by(study, item, visit) %>%
+    group_by(.data$study, .data$item, .data$visit) %>%
     summarise(n_rows = n()) %>%
     ungroup() %>%
     count(n_rows) %>%
@@ -86,7 +98,7 @@ harmonization <- function(harmonization_sheet,
   ## Checking that code_type is entered correctly if there is code in code1:
 
   num_rows_incorrectly_entered <- harmonization_sheet %>%
-    filter((is.na(code1) == FALSE & code1 != '') &
+    filter((is.na(.data$code1) == FALSE & .data$code1 != '') &
            (!(substr(tolower(stringr::str_trim(code_type)),1,1) %in% c('f','r')))) %>%
     nrow()
 
@@ -115,12 +127,12 @@ harmonization <- function(harmonization_sheet,
   # Creating "shell" for time invariant dataset.
 
   combined_time_invariant <- combined_long_dataset %>%
-    distinct(cohort, ID)
+    distinct(.data$cohort, .data$ID)
 
   # Creating error log
 
   error_log_dataset <- harmonization_sheet %>%
-    select(item, study, visit, possible_range)
+    select(.data$item, .data$study, .data$visit, .data$possible_range)
 
   error_log_dataset$completed_status <- NA_character_
 
@@ -158,7 +170,7 @@ harmonization <- function(harmonization_sheet,
       {
         combined_long_dataset <- combined_long_dataset %>%
           left_join(y = intermediate, by = c('cohort' = 'cohort', 'ID' = 'ID', 'visit' = 'visit')) %>%
-          relocate(cohort, ID, visit)
+          relocate(.data$cohort, .data$ID, .data$visit)
 
       }
     }
@@ -176,8 +188,8 @@ harmonization <- function(harmonization_sheet,
       {
         combined_time_invariant <- combined_time_invariant %>%
           left_join(y = intermediate_time_invariant, by = c('cohort' = 'cohort', 'ID' = 'ID')) %>%
-          select(-visit) %>%
-          relocate(cohort, ID)
+          select(-.data$visit) %>%
+          relocate(.data$cohort, .data$ID)
 
       }
     }

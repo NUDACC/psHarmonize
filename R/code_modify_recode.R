@@ -23,6 +23,12 @@ code_modify_recode <- function(data = temp_dataset,
                                na_string = NULL)
 {
 
+  temp_dataset <- NULL
+  code_instruct <- NULL
+  source_item_long <- NULL
+  item <- NULL
+  source_dataset <- NULL
+
   # Create copy of variable to modify
   data[[new_var]] <- data[[old_var]]
 
