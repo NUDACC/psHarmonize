@@ -1,3 +1,5 @@
+# psHarmonize 0.3.3
+
 # psHarmonize 0.3.2
 
 * Fixed issue that prevented some numeric harmonized values from plotting.
