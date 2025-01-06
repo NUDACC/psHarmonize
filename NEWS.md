@@ -1,5 +1,9 @@
 # psHarmonize 0.3.3
 
+* Fixed notes and warnings in `check()` in preparation for submission to CRAN.
+* Added rendered .Rmd readme.
+* Added `.data` prefix in dplyr functions where appropriate.
+
 # psHarmonize 0.3.2
 
 * Fixed issue that prevented some numeric harmonized values from plotting.
