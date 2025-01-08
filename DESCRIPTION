@@ -1,5 +1,5 @@
 Package: psHarmonize
-Title: Creates harmonized dataset based on set of instructions
+Title: Creates a harmonized dataset based on a set of instructions
 Version: 0.3.3
 Authors@R: 
     person(given = "John",
