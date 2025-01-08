@@ -1,0 +1,20 @@
+bibentry(
+bibtype = "article",
+title = "psHarmonize: Facilitating reproducible large-scale pre-statistical data harmonization and documentation in R",
+	volume = "5",
+	copyright = "All rights reserved",
+	issn = "2666-3899",
+	shorttitle = "psHarmonize",
+	doi = "10.1016/j.patter.2024.101003",
+	abstract = "Combining pertinent data from multiple studies can increase the robustness of epidemiological investigations. Effective 'pre-statistical' data harmonization is paramount to the streamlined conduct of collective, multi-study analysis. Harmonizing data and documenting decisions about the transformations of variables to a common set of categorical values and measurement scales are time consuming and can be error prone, particularly for numerous studies with large quantities of variables. The psHarmonize R package facilitates harmonization by combining multiple datasets, applying data transformation functions, and creating long and wide harmonized datasets. The user provides transformation instructions in a 'harmonization sheet' that includes dataset names, variable names, and coding instructions and centrally tracks all decisions. The package performs harmonization, generates error logs as necessary, and creates summary reports of harmonized data. psHarmonize is poised to serve as a central feature of data preparation for the joint analysis of multiple studies.",
+	language = "eng",
+	number = "8",
+	journal = "Patterns (New York, N.Y.)",
+	author = "Stephen, John J. and Carolan, Padraig and Krefman, Amy E. and Sedaghat, Sanaz and Mansolf, Maxwell and Allen, Norrina B. and Scholtens, Denise M.",
+	month = "aug",
+	year = "2024",
+	pmid = "39233692",
+	pmcid = "PMC11368672",
+	keywords = "data management, data harmonization, data integration, data pooling, R package",
+	pages = "101003"
+)
