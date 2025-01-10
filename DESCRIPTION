@@ -1,5 +1,5 @@
 Package: psHarmonize
-Title: Creates a harmonized dataset based on a set of instructions
+Title: Creates a Harmonized Dataset Based on a Set of Instructions
 Version: 0.3.3
 Authors@R: 
     person(given = "John",
@@ -19,7 +19,11 @@ Description: Functions which facilitate harmonization of data from multiple
     harmonized data set, and tracks notes. The package will then harmonize 
     the source datasets according to the harmonization sheet to create a 
     harmonized dataset. Once harmonization is finished, the package also has 
-    functions that will create descriptive statistics using 'RMarkdown'.
+    functions that will create descriptive statistics using 'RMarkdown'. Data
+    Harmonization guidelines have been described by Fortier I, Raina P, 
+    Van den Heuvel ER, et al. (2017) <doi:10.1093/ije/dyw075>. Additional 
+    details of our R package have been described by Stephen JJ, Carolan P, 
+    Krefman AE, et al. (2024) <doi:10.1016/j.patter.2024.101003>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
