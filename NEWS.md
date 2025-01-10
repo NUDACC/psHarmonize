@@ -1,3 +1,8 @@
+# psHarmonize 0.3.4
+
+* Changed title in description file to title case.
+* Added data harmonization references in description file.
+
 # psHarmonize 0.3.3
 
 * Fixed notes and warnings in `check()` in preparation for submission to CRAN.
