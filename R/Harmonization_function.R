@@ -17,6 +17,8 @@
 #' @param na_string Character string of final recode value to be set to missing.
 #'   Default is 'NA'. For example, if you use `code_type` of 'recode', and some of
 #'   your final values are 'NA', they will be set to missing.
+#' @param verbose (TRUE/FALSE) Should the `harmonization()` function print
+#'   the current progress to the console?
 #'
 #' @return List of return objects with S3 class of 'psHarmonize'. Can be used
 #'   as input for report function [create_summary_report()] and
@@ -45,7 +47,8 @@ harmonization <- function(harmonization_sheet,
                           wide_dataset = TRUE,
                           error_log = TRUE,
                           source_variables = TRUE,
-                          na_string = 'NA')
+                          na_string = 'NA',
+                          verbose = TRUE)
 {
 
   study <- NULL
@@ -62,7 +65,8 @@ harmonization <- function(harmonization_sheet,
   # Warning prompt
   if(interactive())
   {
-    cat("psHarmonize evaluates and runs code entered in the harmonization sheet.\n\n")
+    message("\n")
+    message("psHarmonize evaluates and runs code entered in the harmonization sheet.\n")
 
     menu_response <- utils::menu(choices = c('Yes','No'),
                                  title = "Do you trust the author of this harmonization sheet?")
@@ -152,7 +156,8 @@ harmonization <- function(harmonization_sheet,
                                         subdomain =  i,
                                         previous_dataset = combined_long_dataset,
                                         error_log = error_log_dataset,
-                                        na_string = na_string)
+                                        na_string = na_string,
+                                        verbose = verbose)
 
     # Update error log
     error_log_dataset <- intermediate_list$error_log
@@ -194,7 +199,7 @@ harmonization <- function(harmonization_sheet,
       }
     }
 
-    if(i == unique(harmonization_sheet$item)[length(unique(harmonization_sheet$item))]) {print('Finished!')}
+    if(i == unique(harmonization_sheet$item)[length(unique(harmonization_sheet$item))] && verbose) {print('Finished!')}
 
   }
 
@@ -265,10 +270,12 @@ harmonization <- function(harmonization_sheet,
   class(return_list) <- c('psHarmonize', class(return_list))
 
   # Print summary
-  cat('\n')
-  tryCatch(expr = {summary.psHarmonize(return_list)},
-           warning = function(w) {cat('Summary cannot be displayed\n')},
-           error = function(e) {cat('Summary cannot be displayed\n')})
+  if(verbose) {
+    cat('\n')
+    tryCatch(expr = {summary.psHarmonize(return_list)},
+             warning = function(w) {cat('Summary cannot be displayed\n')},
+             error = function(e) {cat('Summary cannot be displayed\n')})
+  }
 
   return(return_list)
 

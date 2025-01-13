@@ -10,7 +10,8 @@ harmonization(
   wide_dataset = TRUE,
   error_log = TRUE,
   source_variables = TRUE,
-  na_string = "NA"
+  na_string = "NA",
+  verbose = TRUE
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ modified values?}
 \item{na_string}{Character string of final recode value to be set to missing.
 Default is 'NA'. For example, if you use \code{code_type} of 'recode', and some of
 your final values are 'NA', they will be set to missing.}
+
+\item{verbose}{(TRUE/FALSE) Should the \code{harmonization()} function print
+the current progress to the console?}
 }
 \value{
 List of return objects with S3 class of 'psHarmonize'. Can be used

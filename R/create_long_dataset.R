@@ -11,6 +11,8 @@
 #' @param previous_dataset Dataframe created so far
 #' @param error_log Error log
 #' @param na_string Character string of final recode value to be set to NA.
+#' @param verbose (TRUE/FALSE) Should the function print the current progress
+#'   to the console?
 #'
 #' @importFrom dplyr rename mutate starts_with bind_rows
 #' @importFrom rlang := .data
@@ -38,9 +40,10 @@
 #'                                     subdomain = 'age',
 #'                                     previous_dataset = test_data,
 #'                                     error_log = test_error_log,
-#'                                     na_string = 'NA')
+#'                                     na_string = 'NA',
+#'                                     verbose = TRUE)
 #'
-create_long_dataset <- function(vars_interest, subdomain, previous_dataset, error_log, na_string)
+create_long_dataset <- function(vars_interest, subdomain, previous_dataset, error_log, na_string, verbose = TRUE)
 {
 
   visit <- NULL
@@ -56,7 +59,9 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
 
     cohort <- vars_interest[current_row,][['study']]
 
-    print(glue::glue('Currently on item: {subdomain}; cohort: {cohort}; visit {vars_interest[current_row,][["visit"]]} / {max(vars_interest[vars_interest$study == vars_interest[current_row,][["study"]],][["visit"]])}.'))
+    if(verbose) {
+      print(glue::glue('Currently on item: {subdomain}; cohort: {cohort}; visit {vars_interest[current_row,][["visit"]]} / {max(vars_interest[vars_interest$study == vars_interest[current_row,][["study"]],][["visit"]])}.'))
+    }
 
     ## Getting values from harmonization sheet
 
@@ -88,8 +93,6 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
     source_item_long <- paste0('source_',item)
 
 
-    #print(source_item_long)
-
     ## Coding instructions
     code_instruct <- vars_interest[current_row,][['code1']]
 
@@ -119,7 +122,9 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
 
     if(exists(source_dataset) == FALSE)
     {
-      print('Dataset not found')
+      if(verbose) {
+        print('Dataset not found')
+      }
 
       error_log[error_log$item == subdomain,][current_row,c('completed_status')] <- 'Not completed'
       error_log[error_log$item == subdomain,][current_row,c('completed_reason')] <- 'Dataset not found'
@@ -154,7 +159,9 @@ create_long_dataset <- function(vars_interest, subdomain, previous_dataset, erro
       if(!(source_item[[j]] %in% names(temp_dataset)))
       {
 
-        print('Variable not found')
+        if(verbose) {
+          print('Variable not found')
+        }
 
         error_log[error_log$item == subdomain,][current_row,c('completed_status')] <- 'Not completed'
         error_log[error_log$item == subdomain,][current_row,c('completed_reason')] <- 'Variable not found'

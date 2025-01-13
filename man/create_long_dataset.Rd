@@ -9,7 +9,8 @@ create_long_dataset(
   subdomain,
   previous_dataset,
   error_log,
-  na_string
+  na_string,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ create_long_dataset(
 \item{error_log}{Error log}
 
 \item{na_string}{Character string of final recode value to be set to NA.}
+
+\item{verbose}{(TRUE/FALSE) Should the function print the current progress
+to the console?}
 }
 \value{
 Returns a list with the harmonized long dataset, and error log.
@@ -54,6 +58,7 @@ long_dataset <- create_long_dataset(vars_interest = test_sheet,
                                     subdomain = 'age',
                                     previous_dataset = test_data,
                                     error_log = test_error_log,
-                                    na_string = 'NA')
+                                    na_string = 'NA',
+                                    verbose = TRUE)
 
 }
