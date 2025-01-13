@@ -1,3 +1,8 @@
+# psHarmonize 0.3.5
+
+* Removed unnecessary spaces in DESCRIPTION file.
+* Added verbose argument to `harmonization()` and `create_long_dataset()` functions.
+
 # psHarmonize 0.3.4
 
 * Changed title in description file to title case.

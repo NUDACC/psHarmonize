@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# psHarmonize 0.3.4
+# psHarmonize 0.3.5
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -42,7 +42,7 @@ An example harmonization sheet is provided with the package.
 
 ``` r
 library(psHarmonize)
-#> psHarmonize ver. 0.3.4
+#> psHarmonize ver. 0.3.5
 #> 
 #> psHarmonize evaluates and runs code entered in the harmonization sheet.
 #> Make sure to only use harmonization sheets from authors you trust.
