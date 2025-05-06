@@ -97,7 +97,7 @@ harmonization <- function(harmonization_sheet,
 
     message('The harmonization sheet should only have one row per study, visit, and item combination.\n')
 
-    dup_rows <- error_sheet %>%
+    dup_rows <- harmonization_sheet %>%
       group_by(.data$study, .data$item, .data$visit) %>%
       summarise(n_rows = n()) %>%
       ungroup() %>%
