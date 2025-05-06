@@ -92,11 +92,28 @@ harmonization <- function(harmonization_sheet,
     summarise(max_rows = max(n_rows)) %>%
     pull(max_rows)
 
-  # stopifnot(max_row_per_group == 1)
-
   if (max_row_per_group > 1)
   {
-    stop("Error: The harmonization sheet should only have one row per Study, visit, Item combination.")
+
+    message('The harmonization sheet should only have one row per study, visit, and item combination.\n')
+
+    dup_rows <- error_sheet %>%
+      group_by(.data$study, .data$item, .data$visit) %>%
+      summarise(n_rows = n()) %>%
+      ungroup() %>%
+      filter(n_rows > 1)
+
+    message('There are duplicates in the following row(s):\n')
+
+    for(i in 1:nrow(dup_rows)){
+      message(paste0('study: ', dup_rows[i,][['study']],
+                     '; visit: ', dup_rows[i,][['visit']],
+                     '; item: ', dup_rows[i,][['item']]))
+    }
+
+    cat('\n')
+
+    stop('The harmonization sheet has duplicate rows of a study, visit, and item combination.')
   }
 
   ## Checking that code_type is entered correctly if there is code in code1:
