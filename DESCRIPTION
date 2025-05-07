@@ -1,6 +1,6 @@
 Package: psHarmonize
 Title: Creates a Harmonized Dataset Based on a Set of Instructions
-Version: 0.3.5
+Version: 0.3.6
 Authors@R: c(person(given = "John",
            family = "Stephen",
            role = c("aut", "cre"),

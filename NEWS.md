@@ -1,3 +1,5 @@
+# psHarmonize 0.3.6
+
 # psHarmonize 0.3.5
 
 * Removed unnecessary spaces in DESCRIPTION file.
