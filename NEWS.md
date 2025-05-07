@@ -1,5 +1,8 @@
 # psHarmonize 0.3.6
 
+* Added more informative error message when duplicate rows are present in harmonization sheet.
+* Added contributors to DESCRIPTION file.
+
 # psHarmonize 0.3.5
 
 * Removed unnecessary spaces in DESCRIPTION file.
