@@ -10,7 +10,7 @@ Authors@R: c(person(given = "John",
            family = "Mansolf",
            role = "ctb",
            email = "maxwell.mansolf@northwestern.edu",
-           comment = c(ORCID = "0000-0001-6861-8657"))
+           comment = c(ORCID = "0000-0001-6861-8657")))
 Description: Functions which facilitate harmonization of data from multiple
     different datasets. Data harmonization involves taking data sources with
     differing values, creating coding instructions to create a harmonized
